@@ -54,15 +54,15 @@ function validateform() {
 
         return false;
     }
-    // if (phone.length < 10 || phone.length > 10) {
-    //     err.innerHTML = 'invalid phone Number';
-    //     return false;
-    // }
-
-    if (phoneRegex.test(phone) == false) {
-        err.innerHTML = 'invalid phone Numberg';
+    if (phone.length < 10 || phone.length > 10) {
+        err.innerHTML = 'invalid phone Number';
         return false;
     }
+
+    // if (phoneRegex.test(phone) == false) {
+    //     err.innerHTML = 'invalid phone Numberg';
+    //     return false;
+    // }
 
     if (passwordRegx.test(password) == false) {
         err.innerHTML = 'Password must contain - 8 inputs, at least 1 capital and 1 Special Character, at least 1 number'

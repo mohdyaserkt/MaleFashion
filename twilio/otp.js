@@ -7,7 +7,7 @@ const client = require('twilio')(accountSid,authToken)
 const otp =(verifiedNumber,otpValue)=>{
   
         client.messages.create({
-        to: "+91"+verifiedNumber,
+        to: "+1"+verifiedNumber,
         from: process.env.FROM_NUMBER,
         body:otpValue+`is your otp for male fashion`
     }).then((message)=>{

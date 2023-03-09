@@ -27,6 +27,7 @@ router.get('/user-checkout/',userGet.userGetCheckout)
 router.get('/user-profile/',userGet.userGetUserProfile)
 router.get('/user-orders/',userGet.userGetUserOrders)
 router.get('/user-orders-cancel/',userGet.userGetUserOrdersCancel)
+router.get('/otp-resend/',userGet.userGetOtpresend)
 
 
 //postRequests
