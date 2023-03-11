@@ -16,6 +16,42 @@ let editCategoryId
 let message
 
 let  editId
+
+
+
+
+
+
+//session function
+ 
+let verifyadminlogin=(req,res,next)=>
+{
+    if(req.session.user)
+    {
+        next()
+    }else
+    {
+        res.redirect('/admin/login')
+    }
+
+}
+
+let verifyadminnotlogin=(req,res,next)=>
+{
+    if(req.session.user)
+    {
+        res.redirect('/admin/dashboard')
+    }else
+    {
+        next()
+    }
+
+}
+
+
+
+
+
 //get requests
 
 const adminGetLogin=(req,res,next)=>{
@@ -425,6 +461,7 @@ const adminPostEditCategory=async(req,res,next)=>{
 
 
 module.exports={
+    verifyadminlogin,verifyadminnotlogin,
     adminGetLogin,adminPostLogin,
     adminGetDashboard,adminGetEditCategoryId,adminGetEditCategory,
     adminGetUsersTable,adminPostEditCategory,

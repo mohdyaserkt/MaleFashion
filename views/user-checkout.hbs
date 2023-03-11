@@ -152,59 +152,109 @@
     <section class="checkout spad">
         <div class="container">
             <div class="checkout__form">
-                {{#each userData}}
+                
                 <form name="sub"  onsubmit="return  validateform()" role="form" action="/user-place-order" method="post">
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
                             here</a> to enter your code</h6>
-                            <h6 class="checkout__title">Billing Details</h6>
+                            <div class="row">
+                            {{!-- <a href="/saved-address"> --}}
+                            <button data-toggle="modal" data-target=".bd-example-modal-lg" style="float: right;width: 100%;" type="button" class="mt-2 btn  btn-dark  btn-with-icon"><i class="ri-bill-fill"></i>Select Saved Address for Checkout</button>
+                            {{!-- </a> --}}
+                            
+
+
+
+
+
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div style="padding: 22px;" class="modal-content">
+
+    
+{{#each chooseaddress}}
+    <div class="card" style="margin-bottom: 3%;">
+    <div class="card-body">
+    <h5 class="card-title">Address No:{{@index}}</h5>
+    <p class="card-text">
+        <div style="width: 50%;       float: left;">
+                <p class="card-text">Name : {{name}} <br> Phone : {{phone}}<br>  Address : {{address}}<br>  Locality : {{locality}}<br> City : {{city}}</p>
+        </div>
+        <div style="width: 50%; margin-bottom: 4%;      float: left;">
+                <p class="card-text"> Landmark : {{landmark}}<br> State : {{state}} <br> Pincode : {{pincode}}<br> Alternative Phone : {{alternativephone}}</p>
+        </div>
+    </p>
+    <a href="/saved-address-choose/{{addressId}}" class="btn btn-primary">Choose</a>
+    </div>
+    </div>
+    {{/each}}
+     
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+                            </div>
+                            <h6 style="margin-top: 3%" class="checkout__title">Billing Details</h6>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Fist Name<span>*</span></p>
-                                        <input id="name" name="name" value="{{userAddress.name}}" type="text">
+                                        <input id="name" name="name" value="{{userData.[0].address.name}}" type="text">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Locality<span>*</span></p>
-                                        <input id="locality" value="{{userAddress.locality}}" name="locality" type="text">
+                                        <input id="locality" value="{{userData.[0].address.locality}}" name="locality" type="text">
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Landmark<span>*</span></p>
-                                <input id="landmark" name="landmark" value="{{userAddress.landmark}}" type="text">
+                                <input id="landmark" name="landmark" value="{{userData.[0].address.landmark}}" type="text">
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
-                                <input id="address" name="address" value="{{userAddress.address}}" type="text" placeholder="Street Address" class="checkout__input__add">
+                                <input id="address" name="address" value="{{userData.[0].address.address}}" type="text" placeholder="Street Address" class="checkout__input__add">
                                 {{!-- <input type="text" placeholder="Apartment, suite, unite ect (optinal)"> --}}
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
-                                <input id="city" name="city" value="{{userAddress.city}}" type="text">
+                                <input id="city" name="city" value="{{userData.[0].address.city}}" type="text">
                             </div>
                             <div class="checkout__input">
                                 <p>State<span>*</span></p>
-                                <input id="state" name="state" value="{{userAddress.state}}" type="text">
+                                <input id="state" name="state" value="{{userData.[0].address.state}}" type="text">
                             </div>
                             <div class="checkout__input">
                                 <p>Postcode / ZIP<span>*</span></p>
-                                <input id="pincode" name="pincode" value="{{userAddress.pincode}}"type="text">
+                                <input id="pincode" name="pincode" value="{{userData.[0].address.pincode}}"type="text">
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Phone<span>*</span></p>
-                                        <input id="phone" name="phone" value="{{userAddress.phone}}" type="text">
+                                        <input id="phone" name="phone" value="{{userData.[0].address.phone}}" type="text">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Alternative Phone<span>*</span></p>
-                                        <input id="alternativephone" name="alternativephone" value="{{userAddress.alternativephone}}" type="text">
+                                        <input id="alternativephone" name="alternativephone" value="{{userData.[0].address.alternativephone}}" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -277,9 +327,11 @@
                         </div>
                     </div>
                 </form>
-                {{/each}}
+               
             </div>
         </div>
+
+        
     </section>
     <!-- Checkout Section End -->
 

@@ -6,6 +6,9 @@ const CategoryManagementCollection = require('../model/CategoryManagementModel')
 const userCartCollection = require('../model/userCartModel')
 const userOrdersCollection = require('../model/ordersModel')
 const session = require('express-session');
+const addressCollection=require('../model/addressModel')
+
+const {v4 : uuidv4} = require('uuid')
 let message
 let otpValue
 let userDetails
@@ -15,62 +18,84 @@ let phoneLoginUserDetails
 let userCartAllProducts = []
 let phonenumber
 let otptime=true
+let savedAddressId
 
 
 
 
+//session function
+ 
+let verifylogin=(req,res,next)=>
+{
+    if(req.session.user)
+    {
+        next()
+    }else
+    {
+        res.redirect('/user-login-email')
+    }
+
+}
+
+let verifynotlogin=(req,res,next)=>
+{
+    if(req.session.user)
+    {
+        res.redirect('/home')
+    }else
+    {
+        next()
+    }
+
+}
 
 
 
 
 
 const userGetHome = function (req, res, next) {
-    if (req.session.user) { res.render('home'); }
-    else {
-        res.redirect('/user-login-email')
-    }
+      res.render('home'); 
+    
 }
 
 const userGetSignup = function (req, res, next) {
-    if (req.session.user) { res.redirect('/home') }
-    else {
+    
+   
         res.render('user-signup', { message: message });
         message = null
 
-    }
+   
 }
 
 const userGetLoginEmail = function (req, res, next) {
 
-    if (req.session.user) { res.redirect('/home') }
-    else {
+    
+    
         res.render('user-login-email', { message: message })
         message = null
-    }
+    
 }
 
 const userGetLoginPhone = function (req, res, next) {
 
-    if (req.session.user) { res.redirect('/home') }
-    else {
+    
         res.render('user-login-Phone', { message: message });
         message = null
 
-    }
+   
 }
 
 const userGetOtpVerification = function (req, res, next) {
 
-    if (req.session.user) { res.redirect('/home') }
-    else {
+    
         res.render('user-otp-verification', { message: message, phone: phonenumber })
         message = null
-    }
+   
 }
 
 const userGetShop = async function (req, res, next) {
 
-    if (req.session.user) {
+    
         const productDetails = await CategoryManagementCollection.find({})
         console.log(productDetails);
 
@@ -93,10 +118,8 @@ const userGetShop = async function (req, res, next) {
 
 
 
-    }
-    else {
-        res.redirect('/user-login-email')
-    }
+    
+    
 
 
 
@@ -128,7 +151,7 @@ const userGetCategory = async function (req, res, next) {
 
 const userGetProductDetails = async function (req, res, next) {
 
-    if (req.session.user) {
+    
         console.log(productDetailsId);
         const product = await productCollection.find({ _id: productDetailsId })
         console.log(product);
@@ -136,10 +159,7 @@ const userGetProductDetails = async function (req, res, next) {
 
         console.log(image);
         res.render('product-details', { product, image })
-    }
-    else {
-        res.redirect('/user-login-email')
-    }
+   
 
 
 
@@ -198,12 +218,28 @@ const userGetCart = async function (req, res, next) {
     res.render('user-cart', { userCartAllProducts, subtotal })
 }
 const userGetCheckout = async function (req, res, next) {
+console.log(savedAddressId);
+    const userData = await addressCollection.aggregate([
 
-    const userData = await userCollection.find({ email: req.session.user })
+        {
+            $match:{userId:req.session.user}
+        },
+        {
+            $unwind:"$address"
+        },
+        {
+            $match:{"address.addressId":savedAddressId}
+        }
+
+    ])
     console.log(userData);
+    console.log("hiiiiiiiii");
+    
+    const address=await addressCollection.findOne({userId:req.session.user})
+    const chooseaddress=address.address
 
 
-    res.render('user-Checkout', { userData })
+    res.render('user-Checkout', { userData,chooseaddress })
 }
 
 const userGetUserProfile = async function (req, res, next) {
@@ -279,14 +315,47 @@ const userGetOtpresend = async function (req, res, next) {
 
 }
 
+const userGetSavedAddress= async function (req, res, next) {
+ const address=await addressCollection.findOne({userId:req.session.user})
+ const alladdress=address.address
+
+    
+
+res.render('user-saved-address',{alladdress})
+}
 
 
+const userGetSavedAddressChoose= async function (req, res, next) 
+{
+    savedAddressId=req.params.id
+    res.redirect('/user-checkout')
+}
 
 
+const userGetDeleteAddress= async function (req, res, next)
+{
+    const deleteId=req.params.id
+
+    await addressCollection.collection.updateOne(
+        { userId:req.session.user},
+        {$pull:{address:{addressId:deleteId}}})
+
+        res.redirect('/saved-address')
+
+}
 
 
+const userGetForgetPassword= async function (req, res, next)
+{
+    res.render('user-forget-password')
+    
+}
 
-
+const userGetForgetPasswordClick= async function (req, res, next)
+{
+    userDetails="forgetpassword" 
+    res.redirect('/user-login-phone')  
+}
 
 
 
@@ -448,6 +517,10 @@ const userPostOtpVerification = async (req, res, next) => {
 
                                     res.redirect('/home')
                                 }
+
+                                else if(userDetails=="forgetpassword"){
+                                    res.redirect('/forget-password')
+                                }
                                 else {
 
 
@@ -558,11 +631,40 @@ const userPostAddToCart = async (req, res, next) => {
 
 
 const userPostAddAddress = async (req, res, next) => {
+
     console.log(req.body);
-    const userAddress = req.body
+    let userAddress={}
+    userAddress.userId=req.session.user
+    userAddress.address=req.body
+    userAddress.address.addressId=uuidv4()
+    console.log(userAddress);
+
     console.log(req.session.user);
 
-    await userCollection.updateOne({ email: req.session.user }, { $set: { "userAddress.name": userAddress.name, "userAddress.phone": userAddress.phone, "userAddress.pincode": userAddress.pincode, "userAddress.locality": userAddress.locality, "userAddress.address": userAddress.address, "userAddress.city": userAddress.city, "userAddress.state": userAddress.state, "userAddress.landmark": userAddress.landmark, "userAddress.alternativephone": userAddress.alternativephone } })
+    //await userCollection.updateOne({ email: req.session.user }, { $set: { "userAddress.name": userAddress.name, "userAddress.phone": userAddress.phone, "userAddress.pincode": userAddress.pincode, "userAddress.locality": userAddress.locality, "userAddress.address": userAddress.address, "userAddress.city": userAddress.city, "userAddress.state": userAddress.state, "userAddress.landmark": userAddress.landmark, "userAddress.alternativephone": userAddress.alternativephone } })
+    //await addressCollection.updateOne({ userId: req.session.user }, { $push:{"address.name":userAddress.name,"address.phone":userAddress.phone,"address.pincode":userAddress.pincode,"address.locality":userAddress.locality,"address.address":userAddress.address,"address.city":userAddress.city,"address.state":userAddress.state,"address.landmark":userAddress.landmark,"address.alternativephone":userAddress.alternativephone} } )
+
+
+
+    const address = await addressCollection.findOne({ userId: req.session.user })
+    if (address) {
+
+        await addressCollection.updateOne({ userId: req.session.user }, { $push: { address: { name: userAddress.address.name, phone: userAddress.address.phone, pincode: userAddress.address.pincode, locality: userAddress.address.locality,address:userAddress.address.address,city:userAddress.address.city,state:userAddress.address.state,landmark:userAddress.address.landmark,alternativephone:userAddress.address.alternativephone,addressId:userAddress.address.addressId} } })
+
+
+
+
+    }
+    else {
+        await addressCollection.insertMany([userAddress])
+    }
+
+
+res.redirect('/saved-address')
+
+
+
+
 
 }
 
@@ -703,11 +805,38 @@ const userPostChangePassword = async (req, res, next) => {
 
 }
 
+const userPostEditAddress = async (req, res, next) => {
+    const newAddress=req.body
+    console.log(newAddress);
+    const editId=req.params.id
+    console.log(editId);
+    await addressCollection.collection.updateOne(
+        { userId:req.session.user, 'address.addressId':editId },
+        { $set: { 'address.$.name':newAddress.name,'address.$.phone':newAddress.phone,'address.$.pincode':newAddress.pincode,'address.$.locality':newAddress.locality,'address.$.address':newAddress.address,'address.$.city':newAddress.city,'address.$.state':newAddress.state,'address.$.landmark':newAddress.landmark,'address.$.alternativephone':newAddress.alternativephone } }
+      );
+
+      res.redirect('/saved-address')
+
+}
+
+const userPostForgetPassword = async (req, res, next) => 
+{
+    const newpassword=req.body
+    console.log(req.body);
+    console.log(phonenumber);
+
+    newpassword.password = await bcrypt.hash(newpassword.password, 10)
+        await userCollection.updateOne({ phone: phonenumber }, { $set: { password: newpassword.password } })
+
+        message = "password changed succesfully please login"
+        console.log("password change succesfully");
+        res.redirect('/user-login-email')
+}
 
 
 
 module.exports = {
-    
+verifylogin,verifynotlogin,    
 userGetCartDelete,
 userGetHome                              
 ,userGetSignup
@@ -725,6 +854,13 @@ userGetCategory,
 userGetUserOrders , 
 userGetUserOrdersCancel,
 userGetOtpresend,
+userGetSavedAddress,
+userGetSavedAddressChoose,
+userGetDeleteAddress,
+userGetForgetPassword,
+userGetForgetPasswordClick,
+
+
 
 
 
@@ -736,7 +872,9 @@ userPostPlaceOrder,
 userPostEditPersonalDetails,
 userPostChangePassword,
 userPostAddToCart,
-userPostSignup,                                              
+userPostSignup, 
+userPostEditAddress, 
+userPostForgetPassword                                            
 }
 
 

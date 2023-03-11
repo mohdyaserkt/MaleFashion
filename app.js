@@ -8,7 +8,13 @@ var session=require('express-session')
 var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
 var fileUpload= require('express-fileupload')
+var hbs=require('express-handlebars')
 
+// var Handlebars = hbs.create({})
+// Handlebars.handlebars.registerHelper("inc", function(value, options)
+// {
+//     return parseInt(value) + 1;
+// }); 
 
 var app = express();
 
