@@ -11,7 +11,7 @@ const nodeMailerOtp=(otpCode,otpEmail)=>{
                     service: "gmail",
                     auth: {
                         user:process.env.NODEMAILER_EMAIL,
-                        pass:process.env.NODEMAILER_PASS
+                        pass:process.env.NODEMAILER_PASS 
                     }
                 })
                 let docs = {
