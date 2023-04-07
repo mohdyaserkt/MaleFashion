@@ -67,6 +67,16 @@ const LogInSchema=new mongoose.Schema({
         alternativephone:{
             type:Number,
         },
+    },
+    wishlist:{
+        type:Array
+        
+    },
+    defaultAddress:{
+        type:String
+    },
+    wallet:{
+        type:Number
     }
 
 

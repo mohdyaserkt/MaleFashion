@@ -1,0 +1,135 @@
+{{>admin-header}}
+<div class="content-page">
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-lg-12">
+            <div class="card">
+               <div class="card-header d-flex justify-content-between">
+                  <div class="header-title">
+                     <h4 class="card-title">Add a New Coupon</h4>
+                  </div>
+               </div>
+               <div class="card-body">
+                  <form action="/admin/add-coupon" method="post">
+                     <div class="row">
+                        <div class="col">
+                           <input type="text" name="couponCode" class="form-control" placeholder="Coupon Code">
+                        </div>
+                        <div class="col">
+                           <select onchange="yesnoCheck(this)" name="discountType" class="custom-select"
+                              id="inputGroupSelect01">
+                              <option selected>Discount Type</option>
+                              <option value="Flat">Flat</option>
+                              <option value="Percentage">Percentage</option>
+                              {{!-- <option value="3">Three</option> --}}
+                           </select>
+                        </div>
+
+                     </div>
+
+
+                     <div class="row" style="margin-top: 3%;">
+                        <div class="col">
+                           <input type="text" name="discount" class="form-control" placeholder="Discount">
+                        </div>
+
+                        <div style="display: none;" id="maxdisc" class="col">
+                           <input type="text" name="maxDiscountAmount" class="form-control"
+                              placeholder="Max Discount Amount">
+                        </div>
+
+                     </div>
+
+
+
+
+
+
+                     <div class="row" style="margin-top: 3%;">
+                        <div class="col">
+                           <input name="minPurchase" type="text" class="form-control" placeholder="Minimum Purchase">
+                        </div>
+
+
+                     </div>
+
+                     <div class="row" style="margin-top: 3%;">
+                        <div class="col">
+                           <label for="">Expiry Date</label>
+                           <input name="expiryDate" type="date" class="form-control" placeholder="">
+                        </div>
+                        <div class="col">
+                           <label for="">Starting Date</label>
+                           <input name="startingDate" type="date" class="form-control" placeholder="">
+                        </div>
+
+                     </div>
+
+                     <div style="margin-top: 3%;">
+                        <button type="reset" class="btn btn-outline-primary mr-2">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                     </div>
+                  </form>
+                  <p class="text-danger" style="font-size: 13px;margin-top: 10px;">{{adCpnMsg}}</p>
+                                                          
+               </div>
+            </div>
+            <script>
+               function yesnoCheck(that) {
+                  if (that.value == "Percentage") {
+
+                     document.getElementById("maxdisc").style.display = "block";
+                  } else {
+                     document.getElementById("maxdisc").style.display = "none";
+                  }
+               }
+            </script>
+
+            <table class="table">
+               <div class="header-title">
+                  <h4 class="card-title">Available Coupons</h4>
+               </div>
+               <thead class="thead-dark">
+                  <tr>
+                     <th scope="col">#</th>
+                     <th scope="col">Coupon Code</th>
+                     <th scope="col">Discount Type</th>
+                     <th scope="col">Discount</th>
+                     <th scope="col">Minimum Purchase</th>
+                     <th scope="col">Maximum Discount</th>
+                     <th scope="col">Starting Date</th>
+                     <th scope="col">Expiry Date</th>
+                     <th scope="col"></th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {{#each coupons}}
+                  <tr>
+                     <th scope="row">{{inc @index}}</th>
+                     <td>{{couponCode}}</td>
+                     <td>{{discountType}}</td>
+                     <td>{{discount}}</td>
+                     <td>{{minPurchase}}</td>
+                     <td>{{maxDiscountAmount}}</td>
+                     <td>{{startingDate}}</td>
+                     <td>{{expiryDate}}</td>
+                     <td>{{#if status}}
+                        <a href="/admin/disable-coupon/{{couponId}}"><button class="btn btn-dark">Disable</button></a>
+                        {{else}}
+                        disabled
+                        {{/if}}
+                     </td>
+                  </tr>
+                  {{/each}}
+               </tbody>
+            </table>
+
+         </div>
+      </div>
+   </div>
+</div>
+</div>
+<!-- Wrapper End-->
+
+
+{{>admin-footer}}

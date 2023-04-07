@@ -17,6 +17,9 @@ const CategoryManagementSchema=new mongoose.Schema({
     date:{
         type:String,
     required:true},
+    status:{
+        type:Boolean,
+    required:true},
 
     
 

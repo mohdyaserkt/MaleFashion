@@ -1,0 +1,118 @@
+{{>admin-header}}
+
+
+
+
+                  
+      <div class="content-page">
+        <div class="header-title">
+                     <h4 class="card-title">Sales Report</h4>
+                  </div>
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-lg-12">
+                <button onclick="printTable()">Generate PDF</button>  <button onclick="exportReportToExcel()">Download Excel</button>
+    <table id="datatable" class="table data-table table-striped table-bordered" >
+
+
+    <div class="dropdown show">
+  <a class="btn btn-dark btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Fiter By
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="/admin/sales-report-filter/day">TODAY</a>
+    <a class="dropdown-item" href="/admin/sales-report-filter/month">THIS MONTH</a>
+    <a class="dropdown-item" href="/admin/sales-report-filter/all">ALL</a>
+    
+  </div>
+</div>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Ordered User</th>
+            <th>Product Id</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {{#each salesReport}}
+        <tr>
+            <td>{{deliverydate}}</td>
+            <td>{{ordereduser}}</td>
+            <td>{{products.productid}}</td>
+            <td>{{products.quantity}}</td>
+            <td>{{products.price}}</td>
+            <td>{{products.totalprice}}</td>
+        </tr>
+        {{/each}}
+        
+            
+        
+        
+        </tbody>  
+</table>
+            </div>
+         </div>
+      </div>
+      </div>
+    </div>
+    <!-- Wrapper End-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+    <script>
+        function printTable() {
+			var table = document.getElementById("datatable");
+			var newWin = window.open('', 'Print-Window');
+			newWin.document.open();
+			newWin.document.write('<html><body onload="window.print()">' + table.outerHTML + '</html>');
+			newWin.document.close();
+			setTimeout(function () { newWin.close(); }, 10);
+		}
+
+
+
+
+
+
+
+
+
+        function exportReportToExcel(){
+    // Include the SheetJS library
+
+
+// Get the table element
+const table = document.getElementById("datatable");
+
+// Convert the table to a workbook
+const workbook = XLSX.utils.table_to_book(table);
+
+// Convert the workbook to a binary Excel file
+const excelBinary = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+
+// Create a Blob object and download the file
+const blob = new Blob([s2ab(excelBinary)], { type: "application/octet-stream" });
+const url = URL.createObjectURL(blob);
+const link = document.createElement("a");
+link.href = url;
+link.download = "salesReport.xlsx";
+link.click();
+
+// Utility function to convert a string to an ArrayBuffer
+function s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < s.length; i++) {
+    view[i] = s.charCodeAt(i) & 0xff;
+  }
+  return buf;
+}
+
+}
+    </script>
+
+    
+  {{>admin-footer}}

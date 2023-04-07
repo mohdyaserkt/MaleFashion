@@ -65,6 +65,9 @@ const userOrdersSchema=new mongoose.Schema({
     required:true},
     deliverydate:{
         type:String,
+    required:true},
+    paymentmethod:{
+        type:String,
     required:true}
     
 

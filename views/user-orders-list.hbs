@@ -1,0 +1,76 @@
+{{>user-header}}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="./index.html">Home</a>
+                            <a href="./shop.html">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class=" shopping__cart__table  ">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 20rem;">Order Placed</th>
+									
+                                    <th style="width: 20rem;" class="">Total</th>
+									
+									<th style="width: 20rem;">Ship To</th>
+                                    <th style="width: 20rem;"> Expected Delivery Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+								{{#each orders}}
+                                <tr>
+                                    
+                                    <td class="cart__price " style="width: 20rem;">{{ordereddate}}</td>
+                                    
+                                    <td  class="cart__price">{{totalprice}}</td>
+                                    <td  class="cart__price">{{deliveryaddress.name}}</td>
+									
+                                    <td class="cart__price " >{{deliverydate}}</td>
+                                    <td class="cart__close " ><a href="/user-orders-id/{{_id}}" class="primary-btn">View</a></td>
+                                </tr>
+                                
+                               {{/each}} 
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="/shop">Continue Shopping</a>
+                            </div>
+                        </div>
+                        {{!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+
+  {{>user-footer}}
