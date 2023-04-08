@@ -643,8 +643,8 @@ const adminPostAddItems = async (req, res, next) => {
             .rotate()
             .resize(1000,1500)
             .jpeg({mozjpeg:true})
-            .toFile('./public/productimages/' + productdetails.productid + i + '.jpg')
-                // image[i].mv('./public/productimages/' + productdetails.productid + i + '.jpg')
+            .toFile('./public/productImages/' + productdetails.productid + i + '.jpg')
+                // image[i].mv('./public/productImages/' + productdetails.productid + i + '.jpg')
                 image[i] = productdetails.productid + i + '.jpg'
             }
             productdetails.image = image
@@ -656,8 +656,8 @@ const adminPostAddItems = async (req, res, next) => {
             .rotate()
             .resize(1000,1500)
             .jpeg({mozjpeg:true})
-            .toFile('./public/productimages/' + productdetails.productid + '.jpg')
-            //image.mv('./public/productimages/' + productdetails.productid + '.jpg')
+            .toFile('./public/productImages/' + productdetails.productid + '.jpg')
+            //image.mv('./public/productImages/' + productdetails.productid + '.jpg')
             productdetails.image = productdetails.productid + '.jpg'
         }
 
@@ -754,8 +754,8 @@ const adminPostEditFormSubmit = async (req, res, next) => {
             .rotate()
             .resize(1000,1500)
             .jpeg({mozjpeg:true})
-            .toFile('./public/productimages/' + productdetails.productid + i + '.jpg')
-                //image[i].mv('./public/productimages/' + productdetails.productid + i + '.jpg')
+            .toFile('./public/productImages/' + productdetails.productid + i + '.jpg')
+                //image[i].mv('./public/productImages/' + productdetails.productid + i + '.jpg')
                 image[i] = productdetails.productid + i + '.jpg'
             }
             productdetails.image = image
@@ -767,8 +767,8 @@ const adminPostEditFormSubmit = async (req, res, next) => {
             .rotate()
             .resize(1000,1500)
             .jpeg({mozjpeg:true})
-            .toFile('./public/productimages/' + productdetails.productid + '.jpg')
-            //image.mv('./public/productimages/' + productdetails.productid + '.jpg')
+            .toFile('./public/productImages/' + productdetails.productid + '.jpg')
+            //image.mv('./public/productImages/' + productdetails.productid + '.jpg')
             productdetails.image = productdetails.productid + '.jpg'
 
 
