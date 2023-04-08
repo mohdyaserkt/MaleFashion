@@ -1,9 +1,9 @@
 const mongoose=require('mongoose')
 
+require('../config/connection')
 
-
-mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://127.0.0.1/ecomerce", { useNewUrlParser: true });
+// mongoose.set('strictQuery', false);
+// mongoose.connect("mongodb://127.0.0.1/ecomerce", { useNewUrlParser: true });
 
 
 const addressSchema=new mongoose.Schema({
@@ -27,4 +27,8 @@ const addressSchema=new mongoose.Schema({
 const addressCollection=new mongoose.model("addressCollection",addressSchema)
 
 module.exports=addressCollection
+
+
+
+
 

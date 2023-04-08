@@ -1,10 +1,10 @@
 const mongoose=require('mongoose')
 
 
-mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://127.0.0.1/ecomerce", { useNewUrlParser: true });
+// mongoose.set('strictQuery', false);
+// mongoose.connect("mongodb://127.0.0.1/ecomerce", { useNewUrlParser: true });
 
-
+require('../config/connection')
 const LogInSchema=new mongoose.Schema({
     name:{
         type:String,

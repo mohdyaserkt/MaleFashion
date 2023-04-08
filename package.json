@@ -16,7 +16,7 @@
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
-    "mongoose": "^6.10.0",
+    "mongoose": "^6.10.5",
     "morgan": "~1.9.1",
     "nocache": "^3.0.4",
     "nodemailer": "^6.9.1",

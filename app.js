@@ -49,7 +49,7 @@ app.use(fileUpload({
   tempFileDir : __dirname + '/public/temp/'
 }))
 app.use(session({
-  secret: "Key", cookie: { maxAge: 600000000000 }, resave: true,
+  secret: "Key", cookie: { maxAge: 30*24*600000  }, resave: true,
   saveUninitialized: true
 }))
 
