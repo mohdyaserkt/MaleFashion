@@ -524,7 +524,7 @@ const userGetCheckout = async function (req, res, next) {
 
 
 
-    // try {
+    try {
 
         const cartProducts=await userCartCollection.findOne({userId:req.session.user})
         let cart=false
@@ -591,11 +591,11 @@ const userGetCheckout = async function (req, res, next) {
         const total = req.session.totalamntcart
 
 
-        res.render('user-Checkout', { layout: 'userlayout',cart, chkoutorders, subtotal, total, userData: checkoutAddress, chooseaddress, savedAddress })
+        res.render('user-checkout', { layout: 'userlayout',cart, chkoutorders, subtotal, total, userData: checkoutAddress, chooseaddress, savedAddress })
 
-    // } catch (error) {
-    //     next()
-    // }
+    } catch (error) {
+        next()
+    }
 
 }
 

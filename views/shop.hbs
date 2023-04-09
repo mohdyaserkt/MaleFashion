@@ -132,15 +132,15 @@
                                     <li onclick="addToWishlist('{{productid}}')"><img src="img/icon/heart.png" alt="">
                                     </li>
 
-                                    <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
-                                    </li>
+                                    {{!-- <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                    </li> --}}
                                     <li><a href="/product-details/{{_id}}"><img src="img/icon/search.png" alt=""></a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
                                 <h6>{{title}}</h6>
-                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <a href="/product-details/{{_id}}" class="add-cart">+ Add To Cart</a>
                                 {{!-- <div class="rating">
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
