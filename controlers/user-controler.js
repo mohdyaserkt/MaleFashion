@@ -684,8 +684,16 @@ const userGetUserOrdersCancel = async function (req, res, next) {
         const status = "canceled"
         const productid = req.query.productid
         console.log("hhhhhhhhhhhhhhhhhhhhhhhhh" + id);
+        console.log(req.query.paymentmethod);
+        const paymentmethod=req.query.paymentmethod
+        console.log(req.query.totalprice);
+        const totalprice=req.query.totalprice
         console.log(productid);
         await userOrdersCollection.updateOne({ _id: id, "products.productid": productid }, { $set: { "products.$.status": status } })
+        if(paymentmethod=="online payments")
+        {
+            await userCollection.updateOne({email:req.session.user},{ $inc: { wallet: totalprice } })
+        }
         res.redirect('/user-orders')
     } catch (error) {
         next()

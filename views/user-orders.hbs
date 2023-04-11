@@ -69,7 +69,7 @@
                                     {{else}}
                                     {{#if (eq products.status "Return Declined")}}
                                     {{else}}
-                                    <td class="cart__close " style="    padding: 1rem"><a href="/user-orders-cancel/?id={{_id}}&productid={{products.productid}}" class="primary-btn">Cancel</a></td>
+                                    <td class="cart__close " style="    padding: 1rem"><a href="/user-orders-cancel/?id={{_id}}&productid={{products.productid}}&paymentmethod={{paymentmethod}}&totalprice={{products.totalprice}}" class="primary-btn">Cancel</a></td>
                                 {{/if}}
                                 {{/if}}
                                 {{/if}}
