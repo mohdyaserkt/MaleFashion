@@ -93,9 +93,9 @@
                             </div>
                             <div class="product__details__cart__option">
                                 <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input name="quantity" type="text" value="1">
-                                    </div>
+                                    {{!-- <div class="pro-qty"> --}}
+                                        <input hidden name="quantity" type="text" value="1">
+                                    {{!-- </div> --}}
                                 </div>
                                 {{#if (eq stock 0)}}
 
