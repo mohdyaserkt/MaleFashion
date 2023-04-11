@@ -24,14 +24,14 @@
     <div class="container">
         <div class="checkout__form">
 
-            <form name="sub" id="checkoutform" role="form" action="" method="">
+            <form name="sub" id="checkoutform" role="form" onsubmit="disableButton()" action="" method="">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
 
                         <div class="row">
                             {{!-- <a href="/saved-address"> --}}
                                 <button data-toggle="modal" data-target=".bd-example-modal-lg"
-                                    style="float: right;width: 100%;" type="button"
+                                    style="float: right;width: 100%; background: black;" type="button"
                                     class="mt-2 btn  btn-dark  btn-with-icon"><i class="ri-bill-fill"></i>Select
                                     Saved Address for Checkout</button>
                                 {{!-- </a> --}}
@@ -98,6 +98,8 @@
                                 <div class="checkout__input">
                                     <p>Fist Name<span>*</span></p>
                                     <input id="name" name="name" value="{{userData.[0].address.name}}" type="text"
+                                        pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid first name containing only alphabetic characters."
                                         required>
                                 </div>
                             </div>
@@ -105,46 +107,59 @@
                                 <div class="checkout__input">
                                     <p>Locality<span>*</span></p>
                                     <input id="locality" value="{{userData.[0].address.locality}}" name="locality"
-                                        type="text" required>
+                                        type="text" pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid locality containing only alphabetic characters."
+                                        required>
                                 </div>
                             </div>
                         </div>
                         <div class="checkout__input">
                             <p>Landmark<span>*</span></p>
-                            <input id="landmark" name="landmark" value="{{userData.[0].address.landmark}}" type="text">
+                            <input id="landmark" name="landmark" value="{{userData.[0].address.landmark}}" type="text"
+                                pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid landmark containing alphabetic characters, digits, and spaces."
+                                required>
                         </div>
                         <div class="checkout__input">
                             <p>Address<span>*</span></p>
                             <input id="address" name="address" value="{{userData.[0].address.address}}" type="text"
-                                placeholder="Street Address" class="checkout__input__add" required>
+                                placeholder="Street Address" class="checkout__input__add" pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid address containing alphabetic characters, digits, and spaces."
+                                required>
                             {{!-- <input type="text" placeholder="Apartment, suite, unite ect (optinal)"> --}}
                         </div>
                         <div class="checkout__input">
                             <p>Town/City<span>*</span></p>
-                            <input id="city" name="city" value="{{userData.[0].address.city}}" type="text" required>
+                            <input id="city" name="city" value="{{userData.[0].address.city}}" type="text"
+                                pattern="^[A-Za-z]+$"
+                                title="Please enter a valid town/city containing only alphabetic characters." required>
                         </div>
                         <div class="checkout__input">
                             <p>State<span>*</span></p>
-                            <input id="state" name="state" value="{{userData.[0].address.state}}" type="text" required>
+                            <input id="state" name="state" value="{{userData.[0].address.state}}" type="text"
+                                pattern="^[A-Za-z\s]+$"
+                                title="Please enter a valid state containing only alphabetic characters." required>
                         </div>
                         <div class="checkout__input">
                             <p>Postcode / ZIP<span>*</span></p>
                             <input id="pincode" name="pincode" value="{{userData.[0].address.pincode}}" type="text"
-                                required>
+                                pattern="^[0-9]{6}$" title="Please enter a valid 6-digit postcode/ZIP code." required>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Phone<span>*</span></p>
                                     <input id="phone" name="phone" value="{{userData.[0].address.phone}}" type="text"
+                                        pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number."
                                         required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Alternative Phone<span>*</span></p>
+                                    <p>Alternative Phone<span></span></p>
                                     <input id="alternativephone" name="alternativephone"
-                                        value="{{userData.[0].address.alternativephone}}" type="text">
+                                        value="{{userData.[0].address.alternativephone}}" type="text"
+                                        pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number.">
                                 </div>
                             </div>
                         </div>
@@ -169,8 +184,12 @@
                             <h4 class="order__title">Your order</h4>
                             <div style="padding: 1rem;background-color: black;" class="card card-block mb-5">
                                 <h4 class="card-title  " style="text-align: center;color: white; "> <b>WALLET</b> </h4>
-
-                                <h5 style="text-align: center;color: white;"> <b>Balance: ₹ 40</b> </h4>
+                                {{#if walletBalance.wallet}}
+                                <h5 style="text-align: center;color: white;"> <b>Balance: ₹ {{walletBalance.wallet}}</b>
+                                    </h4>
+                                    {{else}}
+                                    <h5 style="text-align: center;color: white;"> <b>Balance: ₹ 0</b> </h4>
+                                        {{/if}}
 
                             </div>
 
@@ -189,19 +208,41 @@
                                 {{/if}}
 
                             </ul>
+                            {{#if (eqn total)}}
+                            {{#if (lst subtotal walletBalance.wallet)}}
                             <div class="checkout__input__checkbox">
+
                                 <label for="Wallet">
                                     Wallet
                                     <input name="paymentmethod" value="Wallet"
-                                        onchange="uncheck('onlinePayment','cod'),enableButton2()" type="checkbox" id="Wallet">
+                                        onchange="uncheck('onlinePayment','cod'),enableButton2()" type="checkbox"
+                                        id="Wallet">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
+                            {{/if}}
+                            {{else}}
+                            {{#if (lst total walletBalance.wallet)}}
+                            <div class="checkout__input__checkbox">
+
+                                <label for="Wallet">
+                                    Wallet
+                                    <input name="paymentmethod" value="Wallet"
+                                        onchange="uncheck('onlinePayment','cod'),enableButton2()" type="checkbox"
+                                        id="Wallet">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            {{/if}}
+
+                            {{/if}}
+
                             <div class="checkout__input__checkbox">
                                 <label for="cod">
                                     Cash Own Delivery
-                                    <input name="paymentmethod" value="Cash on delivery"
-                                        onchange="uncheck('onlinePayment','Wallet'),enableButton2()" type="checkbox" id="cod">
+                                    <input checked name="paymentmethod" value="Cash on delivery"
+                                        onchange="uncheck('onlinePayment','Wallet'),enableButton2()" type="checkbox"
+                                        id="cod">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -209,11 +250,12 @@
                                 <label for="onlinePayment">
                                     Online Payment
                                     <input name="paymentmethod" value="online payments"
-                                        onchange="uncheck('cod','Wallet'),enableButton2()" type="checkbox" id="onlinePayment">
+                                        onchange="uncheck('cod','Wallet'),enableButton2()" type="checkbox"
+                                        id="onlinePayment">
                                     <span class="checkmark"></span>
                                 </label>
                                 <script>
-                                    function uncheck(id,id1) {
+                                    function uncheck(id, id1) {
                                         var checkbox = document.getElementById(id);
                                         checkbox.checked = false;
                                         var checkbox1 = document.getElementById(id1);
@@ -224,7 +266,7 @@
                                 <script>
                                     function enableButton2() {
                                         document.getElementById("submit").disabled = false;
-                                       
+
                                     }
                                 </script>
 
@@ -239,10 +281,13 @@
 
                             <p class="text-danger" id="error-message"></p>
                             {{#if cart}}
-                            <button  disabled id="submit" type="submit" class="site-btn">PLACE ORDER</button>
+
+                            <button style="background: black;" id="submit" type="submit" class="site-btn">PLACE
+                                ORDER</button>
                             {{else}}
                             <div class="row">
-                            <p style="text-align: center;" class="text-danger"><b>YOUR CART IS EMPTY</b></p></div>
+                                <p style="text-align: center;" class="text-danger"><b>YOUR CART IS EMPTY</b></p>
+                            </div>
                             {{/if}}
                         </div>
                     </div>
@@ -254,6 +299,13 @@
 
 
 </section>
+
+<script>
+    function disableButton() {
+        document.getElementById("submit").disabled = true;
+
+    }
+</script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -289,9 +341,9 @@
             "key": "rzp_test_MuIKQEa1huaLLF", // Enter the Key ID generated from the Dashboard
             "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
-            "name": "Acme Corp", //your business name
+            "name": "Male_Fashion", //your business name
             "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
+            "image": "/img/logo.png",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
 
@@ -307,7 +359,7 @@
                 "address": "Razorpay Corporate Office"
             },
             "theme": {
-                "color": "#3399cc"
+                "color": "#020208"
             }
         };
 

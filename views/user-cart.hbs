@@ -1,234 +1,264 @@
-
-
-
-
-
-
 {{>user-header}}
 
-	<!-- Breadcrumb Section Begin -->
-	<section class="breadcrumb-option">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="breadcrumb__text">
-						<h4>Shopping Cart</h4>
-						<div class="breadcrumb__links">
-							<a href="./index.html">Home</a>
-							<a href="./shop.html">Shop</a>
-							<span>Shopping Cart</span>
-						</div>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb__text">
+					<h4>Shopping Cart</h4>
+					<div class="breadcrumb__links">
+						<a href="./index.html">Home</a>
+						<a href="./shop.html">Shop</a>
+						<span>Shopping Cart</span>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-	<!-- Breadcrumb Section End -->
+	</div>
+</section>
+<!-- Breadcrumb Section End -->
 
-	<!-- Shopping Cart Section Begin -->
-	<section class="shopping-cart spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="shopping__cart__table">
-						<table>
-							<thead>
-								<tr>
-									<th>Product</th>
-									<th>Quantity</th>
-									<th>Total</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="shopping__cart__table">
+					<table>
+						<thead>
+							<tr>
+								<th>Product</th>
+								<th>Quantity</th>
+								<th>Total</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
 
-								 {{#each userCartAllProducts}} 
-								<tr>
-									<td class="product__cart__item">
-										<div class="product__cart__item__pic">
-											<img width="70px" height="90px" src="/productImages/{{product.image.[0]}}" alt="">
-										</div>
-										<div class="product__cart__item__text">
-											<h6>{{product.title}}</h6>
-											<h5>₹{{product.price}}</h5>
-										</div>
-									</td>
-									<td class="quantity__item">
-										{{#if (gtr quantity  product.stock)}}
-										<button disabled class="primary-btn bg-danger">Out Of Stock</button>
+							{{#each userCartAllProducts}}
+							<tr>
+								<td class="product__cart__item">
+									<div class="product__cart__item__pic">
+										<img width="70px" height="90px" src="/productImages/{{product.image.[0]}}"
+											alt="">
+									</div>
+									<div class="product__cart__item__text">
+										<h6>{{product.title}}</h6>
+										<h5>₹{{product.price}}</h5>
+									</div>
+								</td>
+								<td class="quantity__item">
+									{{#if (gtr quantity product.stock)}}
+									<button disabled class="primary-btn bg-danger">Out Of Stock</button>
 
+									{{else}}
+
+
+
+
+									<ul id="{{@index}}{{size}}" class="pagination justify-content-start set_quantity">
+										<p id="{{product.productid}}{{size}}{{@index}}" class="{{@index}}" value="" hidden>
+											{{product.stock}}</p>
+										<li class="page-item">
+											<button class="page-link" id="{{@index}}{{product.productid}}"
+												onclick="decreaseValue('{{product.productid}}','{{size}}','{{@index}}'),changeQuantity('{{_id}}','{{product.productid}}',-1,'{{@index}}','{{size}}')"><i
+													class="fa-solid fa-minus"></i></button>
+										</li>
+										
+										<li class="page-item">
+											<button class="page-link" id="{{product.productid}}{{size}}">{{quantity}}</button>
+										</li>
+										<li class="page-item">
+											<button id="{{@index}}"
+												onclick="increaseValue('{{product.productid}}','{{size}}','{{@index}}'),changeQuantity('{{_id}}','{{product.productid}}',1,'{{@index}}','{{size}}')"
+												class="page-link"><i class="fa-solid fa-plus"></i></button>
+										</li>
+									</ul>
+
+									{{!-- <div class="quantity" style="margin-left: -1rem;">
+										{{#if (eq quantity 1)}}
+										<div class="value-button" id="decrease"> </div>
 										{{else}}
-										<div class="quantity" style="margin-left: -1rem;">
-											{{#if (eq quantity 1)}}
-											<div class="value-button" id="decrease"
-												
-												> </div>
-											{{else}}
-											<div class="value-button" id="decrease"
-												onclick="decreaseValue(),changequantity('{{product.productid}}',-1)"
-												value="Decrease Value">-</div>
-												{{/if}}
-											<input type="number" id="number" value="{{quantity}}" />
-											<div class="value-button" id="increase"
-												onclick="increaseValue(),changequantity('{{product.productid}}',1)"
-												value="Increase Value">+</div>
-										</div>
+										<div class="value-button" id="decrease"
+											onclick="decreaseValue(),changequantity('{{product.productid}}',-1)"
+											value="Decrease Value">-</div>
 										{{/if}}
+										<input type="number" id="number" value="{{quantity}}" />
+										<div class="value-button" id="increase"
+											onclick="increaseValue(),changequantity('{{product.productid}}',1)"
+											value="Increase Value">+</div>
+									</div> --}}
+									{{/if}}
 
-									</td>
-									<td class="cart__price">${{totalprice}}</td>
-									<td class="cart__close"><a href="/user-cart-delete/?productId={{product.productid}}&colour={{colour}}&size={{size}}"><i class="fa fa-close"></i></a></td>
-								</tr>
-								{{/each}}
+								</td>
+								<td class="cart__price">${{totalprice}}</td>
+								<td class="cart__close"><a
+										href="/user-cart-delete/?productId={{product.productid}}&colour={{colour}}&size={{size}}"><i
+											class="fa fa-close"></i></a></td>
+							</tr>
+							{{/each}}
 
 
 
-							</tbody>
-						</table>
-					</div>
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6">
-							<div class="continue__btn">
-								<a href="#">Continue Shopping</a>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-6">
-							<div class="continue__btn update__btn">
-								<a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-							</div>
-						</div>
-					</div>
+						</tbody>
+					</table>
 				</div>
-				<div class="col-lg-4">
-					<div class="cart__discount">
-						<h6>Discount codes</h6>
-						<form action="/apply-coupon" method="post">
-							<input name="couponCode" type="text" placeholder="Coupon code">
-							<button type="submit">Apply</button>
-						</form>
-						<p style="font-size: 10px; margin-top: 3px; " class="text-danger">{{cpnMessage}}</p>
+				<script src="https://kit.fontawesome.com/ef130786bf.js" crossorigin="anonymous"></script>
+
+
+				<script>
+					function increaseValue(productId, size, index) {
+						var element = document.getElementById(productId + size);
+						var element1 = document.getElementById(productId + size + index)
+						var val = parseInt(document.getElementById(index + productId).value, 10)
+						if (element) {
+							var value = parseInt(element.textContent);
+							value = isNaN(value) ? 0 : value;
+							value++;
+
+
+							console.log(value)
+							console.log(parseInt(element1.innerHTML))
+							if (parseInt(element1.innerHTML) < value) {
+								console.log("dey")
+								val.remove()
+								//document.getElementById(index).style.visibility="hidden"
+							} else {
+								element.textContent = value;
+								//document.getElementById(index).style.visibility="visible"
+							}
+							return value;
+						}
+					}
+
+
+					function decreaseValue(productId, size, index) {
+						var element = document.getElementById(productId + size);
+						var element1 = document.getElementById(index + productId)
+						var val = parseInt(document.getElementById(index).value, 10)
+						if (element) {
+							var value = parseInt(element.textContent);
+							value = isNaN(value) ? 0 : value;
+							if (value > 0) {
+								value--;
+								if (value == 0) {
+									val.remove()
+									//  element1.style.visibility = 'hidden';
+								} else {
+									element.textContent = value;
+									//element1.style.visibility = 'visible';
+								}
+
+							}
+							return value;
+						}
+					}
+
+				</script>
+				<script>
+					 function changeQuantity(cartId, productId, count, index, size){
+	
+	console.log("cartId -"+cartId)
+	console.log("productId -"+productId)
+	
+	console.log("count -"+count)
+	console.log("index -"+index)
+
+	console.log("size -"+size)
+let quantity = parseInt(document.getElementById(productId+size).innerHTML);
+          $.ajax({
+                url: '/change-cart-quantity',
+                data: {
+                    cart: cartId,
+                    productid: productId,
+                    count: count,
+                    quantity:quantity,
+                    size: size
+                },
+                method: 'post',
+                success: (response) => {
+					console.log("helooooooooo")
+					console.log(response)
+                    console.log(response.productId +" "+response.quantity);
+                    
+                        
+                        document.getElementById(response.productId + response.size).innerHTML = response.quantity;
+                        
+						
+						document.getElementById('subt').innerHTML = response.subtotal;
+
+						if(document.getElementById('subt1')){
+						 document.getElementById('subt1').innerHTML = response.subtotal;}
+						 else{
+						 document.getElementById('total78').innerHTML = response.total;
+						}
+                    
+                }
+            });
+        }
+
+				</script>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="continue__btn">
+							<a href="/shop">Continue Shopping</a>
+						</div>
 					</div>
-					<div class="cart__total">
-						<h6>Cart total</h6>
-						<ul>
-							<li>Subtotal <span>${{subtotal}}</span></li>
-							<li class="text-danger">Discount <span>${{discount1}}</span></li>
-							{{#if (eqn total)}}
-							<li>Total <span>${{subtotal}}</span></li>
-							{{else}}
-							<li>Total <span>${{total}}</span></li>
-							{{/if}}
-						</ul>
-						{{#if (eq subtotal 0)}}
-						<p class="text-danger">Cart is Empty</p>
-						{{else}}
-						{{#if checkout}}
-						<a href="/user-checkout" class="primary-btn">Proceed to checkout</a>
-						{{else}}
-						<p class="text-danger">Remove OutOfStock Product</p>
-						{{/if}}
-						{{/if}}
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="continue__btn update__btn">
+							<a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+						</div>
 					</div>
 				</div>
 			</div>
+			<div class="col-lg-4">
+				<div class="cart__discount">
+					<h6>Discount codes</h6>
+					<form action="/apply-coupon" method="post">
+						<input name="couponCode" type="text" placeholder="Coupon code">
+						<button type="submit">Apply</button>
+					</form>
+					<p style="font-size: 10px; margin-top: 3px; " class="text-danger">{{cpnMessage}}</p>
+				</div>
+				<div class="cart__total">
+					<h6>Cart total</h6>
+					<ul>
+						<li>Subtotal <span>₹<span id="subt">{{subtotal}}</span></span></li>
+						{{#if discount1}}
+						<li class="text-danger">Discount <span>₹{{discount1}}</span></li>
+						{{else}}
+						<li class="text-danger">Discount <span>₹0</span></li>
+						{{/if}}
+						{{#if (eqn total)}}
+						<li>Total <span>₹<span id="subt1">{{subtotal}}</span></li>
+						{{else}}
+						<li>Total<span>₹ <span id="total78">{{total}}</span></li>
+						{{/if}}
+					</ul>
+					{{#if (eq subtotal 0)}}
+					<p class="text-danger">Cart is Empty</p>
+					{{else}}
+					{{#if checkout}}
+					<a href="/user-checkout" class="primary-btn">Proceed to checkout</a>
+					{{else}}
+					<p class="text-danger">Remove OutOfStock Product</p>
+					{{/if}}
+					{{/if}}
+				</div>
+			</div>
 		</div>
-	</section>
-	<!-- Shopping Cart Section End -->
-
-	<script>
-		function changequantity(productid, count) {
-
-			$.ajax({
-				url: '/change-cart-quantity',
-				data: {
-					productid: productid,
-					count: count
-				},
-				method: 'POST',
-				success: (response) => {
-					location.href = '/user-cart'
-				}
-			})
-
-
-		}
-	</script>
+	</div>
+</section>
+<!-- Shopping Cart Section End -->
 
 
 
-	<style>
-		.value-button {
-			display: inline-block;
-
-			margin: 0px;
-			width: 40px;
-			height: 20px;
-			text-align: center;
-			vertical-align: middle;
-			padding: 11px 0;
-
-			-webkit-touch-callout: none;
-			-webkit-user-select: none;
-			-khtml-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-			margin-top: -2rem;
-		}
-
-		.value-button:hover {
-			cursor: pointer;
-		}
-
-		form #decrease {
-			margin-right: -4px;
-			border-radius: 8px 0 0 8px;
-		}
-
-		form #increase {
-			margin-left: -4px;
-			border-radius: 0 8px 8px 0;
-		}
-
-		form #input-wrap {
-			margin: 0px;
-			padding: 0px;
-		}
-
-		input#number {
-			text-align: center;
-			border: none;
-			border-top: 1px solid #ddd;
-			border-bottom: 1px solid #ddd;
-			margin: 0px;
-			width: 40px;
-			height: 40px;
-		}
-
-		input[type=number]::-webkit-inner-spin-button,
-		input[type=number]::-webkit-outer-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
-	</style>
-
-	<script>
-		function increaseValue() {
-			var value = parseInt(document.getElementById('number').value, 10);
-			value = isNaN(value) ? 0 : value;
-			value++;
-			document.getElementById('number').value = value;
-		}
-
-		function decreaseValue() {
-			var value = parseInt(document.getElementById('number').value, 10);
-			value = isNaN(value) ? 0 : value;
-			value < 1 ? value = 1 : '';
-			value--;
-			document.getElementById('number').value = value;
-		}
-	</script>
 
 
 
-	{{>user-footer}}
+
+
+
+
+{{>user-footer}}

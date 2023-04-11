@@ -24,7 +24,7 @@
                 <img style="height: 1.5rem;" src="/img/logo.png" alt="logo" class="logo">
               </div>
               <p class="login-card-description mb-4">Create account</p>
-              <form name="sub" method="post" onsubmit="return  validateform()" role="form" action="/user-signup">
+              <form name="sub" method="post" onsubmit="return  validateform()" onsubmit="disableButton()" role="form" action="/user-signup">
                 <div class="form-group mb-4">
                   <label for="name" class="sr-only">Name</label>
                   <input type="text" name="name" id="name" class="form-control" placeholder="Name">
@@ -71,6 +71,12 @@
       
     </div>
   </main>
+  <script>
+  function disableButton() {
+    document.getElementById("signup").disabled = true;
+    
+  }
+</script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

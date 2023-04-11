@@ -37,6 +37,11 @@ hb.handlebars.registerHelper("inc", function(value, options)
 });
 
 
+hb.handlebars.registerHelper('lst', function (a,b) {
+  return a <= b ;
+});
+
+
 
 
 app.use(logger('dev'));

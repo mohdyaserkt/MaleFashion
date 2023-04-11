@@ -37,7 +37,7 @@
 
                   </div>
                   <p>{{message}}</p> <div style="display: block;" id="resendotp"> <a class="forgot-password-link" onclick="otpresend(),show()"  style="float: right;    margin-left: 25%;">Resend Otp</a></div>
-                  <input name="submit-otp" id="submit-otp" class="btn btn-block login-btn mb-4" type="submit" value="Submit Otp">
+                  <input name="submit-otp" id="submit-otp" class="btn btn-block login-btn mb-4" type="submit" value="Submit Otp" pattern="[0-9]{6}" title="Please enter a 6-digit OTP" required>
                 </form>
                 <div class="row">
                   
@@ -81,13 +81,7 @@
     }
     
   </script>
-  {{!-- <script>
-    function otpresend(){
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "/otp-resend/", true)
-    xhttp.send()}
-
-  </script> --}}
+  
 
   <script>
 		function otpresend() {

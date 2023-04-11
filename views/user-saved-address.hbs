@@ -24,13 +24,15 @@ body{
                               </div>
                            </div>
                            <div class="card-body">
-                              <form action="/user-add-address" method="post">
+                              <form action="/user-add-address" method="post" onsubmit="disableButton5()">
                                  <div class="row">
                                  <div class="col">
-                                    <input type="text"  name="name" class="form-control" placeholder="Name">
+                                    <input type="text"  name="name" class="form-control" placeholder="Name" pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid first name containing only alphabetic characters."
+                                        required>
                                  </div>
                                  <div class="col">
-                                    <input type="text"  name="phone" class="form-control" placeholder="Phone Number">
+                                    <input type="text"  name="phone" class="form-control" placeholder="Phone Number" pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number." required>
                                  </div>
                                  
                                   </div>
@@ -38,25 +40,31 @@ body{
                               
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input type="text" name="pincode" class="form-control" placeholder="Pincode">
+                                    <input type="text" name="pincode" class="form-control" placeholder="Pincode" pattern="^[0-9]{6}$" title="Please enter a valid 6-digit postcode/ZIP code." required>
                                  </div>
                                  <div class="col">
-                                    <input type="text"  name="locality" class="form-control" placeholder="Locality">
+                                    <input type="text"  name="locality" class="form-control" placeholder="Locality" pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid locality containing only alphabetic characters."
+                                        required>
                                  </div>
                                  
                                  </div>
 
                                  <div class="form-group" style="margin-top: 3%;">
       
-                                    <textarea name="address"  placeholder="Address(street and area)" class="form-control" id="exampleFormControlTextarea1" rows="2">{{userAddress.address}}</textarea>
+                                    <textarea name="address"  placeholder="Address(street and area)" class="form-control" id="exampleFormControlTextarea1" rows="2" pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid address containing alphabetic characters, digits, and spaces."
+                                required>{{userAddress.address}}</textarea>
                                  </div>
 
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input name="city"  type="text" class="form-control" placeholder="City/District/Town">
+                                    <input name="city"  type="text" class="form-control" placeholder="City/District/Town"  pattern="^[A-Za-z]+$"
+                                title="Please enter a valid town/city containing only alphabetic characters." required>
                                  </div>
                                  <div class="col">
-                                    <input name="state" type="text" class="form-control" placeholder="State">
+                                    <input name="state" type="text" class="form-control" placeholder="State" pattern="^[A-Za-z\s]+$"
+                                title="Please enter a valid state containing only alphabetic characters." required>
                                  </div>
                                  
                                   </div>
@@ -64,17 +72,19 @@ body{
                               
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input name="landmark"  type="text" class="form-control" placeholder="Landmark (Optional)">
+                                    <input name="landmark"  type="text" class="form-control" placeholder="Landmark (Optional) " pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid landmark containing alphabetic characters, digits, and spaces."
+                                required>
                                  </div>
                                  <div class="col">
-                                    <input name="alternativephone"  type="text" class="form-control" placeholder="Alternate Phone (Optional)">
+                                    <input name="alternativephone"  type="text" class="form-control" placeholder="Alternate Phone (Optional)" pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number.">
                                  </div>
                                  
                                  </div>
    
                                  <div style="margin-top: 3%;">
                                  <button type="reset" class="btn btn-outline-primary mr-2">Cancel</button>
-                                 <button type="submit" class="btn btn-primary">Submit</button></div>
+                                 <button type="submit1" class="btn btn-primary">Submit</button></div>
                               </form>
                            </div>
                         </div>
@@ -82,6 +92,12 @@ body{
             </div>
         </div>
         </div>
+        <script>
+  function disableButton5() {
+    document.getElementById("submit1").disabled = true;
+    
+  }
+</script>
 
 
 
@@ -106,13 +122,15 @@ body{
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
      <div class="card-body">
-                              <form action="/user-edit-address/{{addressId}}" method="post">
+                              <form action="/user-edit-address/{{addressId}}" onsubmit="disableButton()" method="post">
                                  <div class="row">
                                  <div class="col">
-                                    <input type="text" value="{{name}}" name="name" class="form-control" placeholder="Name">
+                                    <input type="text" value="{{name}}" name="name" class="form-control" placeholder="Name" pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid first name containing only alphabetic characters."
+                                        required>
                                  </div>
                                  <div class="col">
-                                    <input type="text" value="{{phone}}" name="phone" class="form-control" placeholder="Phone Number">
+                                    <input type="text" value="{{phone}}" name="phone" class="form-control" placeholder="Phone Number" pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number." required>
                                  </div>
                                  
                                   </div>
@@ -120,25 +138,31 @@ body{
                               
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input type="text"value="{{pincode}}" name="pincode" class="form-control" placeholder="Pincode">
+                                    <input type="text"value="{{pincode}}" name="pincode" class="form-control" placeholder="Pincode" pattern="^[0-9]{6}$" title="Please enter a valid 6-digit postcode/ZIP code." required>
                                  </div>
                                  <div class="col">
-                                    <input type="text" value="{{locality}}" name="locality" class="form-control" placeholder="Locality">
+                                    <input type="text" value="{{locality}}" name="locality" class="form-control" placeholder="Locality" pattern="^[A-Za-z]+$"
+                                        title="Please enter a valid locality containing only alphabetic characters."
+                                        required>
                                  </div>
                                  
                                  </div>
 
                                  <div class="form-group" style="margin-top: 3%;">
       
-                                    <textarea name="address"  placeholder="Address(street and area)" class="form-control" id="exampleFormControlTextarea1" rows="2">{{address}}</textarea>
+                                    <textarea name="address"  placeholder="Address(street and area)" class="form-control" id="exampleFormControlTextarea1" rows="2"  pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid address containing alphabetic characters, digits, and spaces."
+                                required>{{address}}</textarea>
                                  </div>
 
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input name="city" value="{{city}}" type="text" class="form-control" placeholder="City/District/Town">
+                                    <input name="city" value="{{city}}" type="text" class="form-control" placeholder="City/District/Town"  pattern="^[A-Za-z]+$"
+                                title="Please enter a valid town/city containing only alphabetic characters." required>
                                  </div>
                                  <div class="col">
-                                    <input name="state" value="{{state}}" type="text" class="form-control" placeholder="State">
+                                    <input name="state" value="{{state}}" type="text" class="form-control" placeholder="State" pattern="^[A-Za-z\s]+$"
+                                title="Please enter a valid state containing only alphabetic characters." required>
                                  </div>
                                  
                                   </div>
@@ -146,18 +170,26 @@ body{
                               
                                  <div class="row" style="margin-top: 3%;">
                                  <div class="col">
-                                    <input name="landmark" value="{{landmark}}" type="text" class="form-control" placeholder="Landmark (Optional)">
+                                    <input name="landmark" value="{{landmark}}" type="text" class="form-control" placeholder="Landmark (Optional)" pattern="^[A-Za-z0-9\s]+$"
+                                title="Please enter a valid landmark containing alphabetic characters, digits, and spaces."
+                                >
                                  </div>
                                  <div class="col">
-                                    <input name="alternativephone" value="{{alternativephone}}" type="text" class="form-control" placeholder="Alternate Phone (Optional)">
+                                    <input name="alternativephone" value="{{alternativephone}}" type="text" class="form-control" placeholder="Alternate Phone (Optional)" pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number.">
                                  </div>
                                  
                                  </div>
    
                                  <div style="margin-top: 3%;">
                                  <button type="reset" class="btn btn-outline-primary mr-2">Cancel</button>
-                                 <button type="submit" class="btn btn-primary">Submit</button></div>
+                                 <button id="addaddresssubmit" type="submit" class="btn btn-primary">Submit</button></div>
                               </form>
+                              <script>
+  function disableButton() {
+    document.getElementById("addaddresssubmit").disabled = true;
+    
+  }
+</script>
                            </div>
     </div>
   </div>

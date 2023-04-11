@@ -23,7 +23,8 @@ const instance = new Razorpay({
 })
 
 const { v4: uuidv4 } = require('uuid')
-const adminCouponCollection = require('../model/couponModel')
+const adminCouponCollection = require('../model/couponModel');
+const { log } = require('console');
 
 
 
@@ -526,6 +527,10 @@ const userGetCheckout = async function (req, res, next) {
 
     try {
 
+        const walletBalance= await userCollection.findOne({email:req.session.user}).lean()
+        console.log("heloooooooooooooooooooooooooo");
+        console.log(walletBalance);
+
         const cartProducts=await userCartCollection.findOne({userId:req.session.user})
         let cart=false
         if(cartProducts){cart=true}
@@ -591,7 +596,7 @@ const userGetCheckout = async function (req, res, next) {
         const total = req.session.totalamntcart
 
 
-        res.render('user-checkout', { layout: 'userlayout',cart, chkoutorders, subtotal, total, userData: checkoutAddress, chooseaddress, savedAddress })
+        res.render('user-checkout', { layout: 'userlayout',cart, chkoutorders, subtotal, total, userData: checkoutAddress, chooseaddress, savedAddress,walletBalance })
 
     } catch (error) {
         next()
@@ -1487,7 +1492,24 @@ const userPostPlaceOrder = async (req, res, next) => {
 
 
         }
+        else if(deliveryAddress.paymentmethod == "Wallet"){
+            const paymentid=uuidv4()
+            for (i = 0; i < orders.products.length; i++) {
+                orders.products[i].paymentid =paymentid
+
+            }
+            await userCollection.updateOne({email:req.session.user},{ $inc: { wallet: "-" + orders.totalprice} })
+            await userOrdersCollection.insertMany([orders])
+            await userCartCollection.deleteOne({ userId: req.session.user })
+            res.json({ status: false })
+
+        }
         else {
+            const paymentid=uuidv4()
+            for (i = 0; i < orders.products.length; i++) {
+                orders.products[i].paymentid =paymentid
+
+            }
             console.log("HIIIIIIIIIIIIII");
             await userOrdersCollection.insertMany([orders])
             await userCartCollection.deleteOne({ userId: req.session.user })
@@ -1708,7 +1730,51 @@ const userPostChangeCartQuantity = async (req, res, next) => {
         updatedetails.count = parseInt(updatedetails.count)
         await userCartCollection.updateOne({ userId: req.session.user, 'cartProducts.productId': updatedetails.productid }, { $inc: { 'cartProducts.$.quantity': updatedetails.count } })
         console.log("quantity changed");
-        res.json({ status: true })
+
+
+
+
+        userCartAllProducts = await userCartCollection.aggregate([
+            { $match: { userId: req.session.user } }, { $unwind: '$cartProducts' }, { $project: { productId: "$cartProducts.productId", quantity: "$cartProducts.quantity", size: "$cartProducts.size", colour: "$cartProducts.colour" } },
+            {
+                $lookup: {
+                    from: 'productcollections',
+                    localField: 'productId',
+                    foreignField: 'productid',
+                    as: 'product'
+                }
+            }, {
+                $project: {
+                    productId: 1, quantity: 1, size: 1, colour: 1, product: { $arrayElemAt: ['$product', 0] }
+                }
+            }
+        ])
+        let totalprice
+        
+
+        for (var i = 0; i < userCartAllProducts.length; i++) {
+            totalprice = userCartAllProducts[i].quantity * userCartAllProducts[i].product.price
+            userCartAllProducts[i].totalprice = totalprice
+        }
+
+        req.session.userCartAllProducts=userCartAllProducts
+
+        let subtotal = 0
+
+        for (var i = 0; i < userCartAllProducts.length; i++) {
+            subtotal = (userCartAllProducts[i].quantity * userCartAllProducts[i].product.price) + subtotal
+        }
+        let total
+        if(req.session.discountedAmount){
+            total=subtotal-req.session.discountedAmount
+        }else{
+            total=subtotal
+        }
+        req.session.totalamntcart=total
+
+        res.json({ quantity: updatedetails.quantity,productId: updatedetails.productid,total:total,subtotal:subtotal,size:updatedetails.size });
+
+        
     } catch (error) {
         next()
     }

@@ -13,10 +13,11 @@
                   <form action="/admin/add-coupon" method="post">
                      <div class="row">
                         <div class="col">
-                           <input type="text" name="couponCode" class="form-control" placeholder="Coupon Code">
+                           <input type="text" name="couponCode" class="form-control" placeholder="Coupon Code" required
+                              pattern="^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$" title="invalid coupon only aplpha numeric">
                         </div>
                         <div class="col">
-                           <select onchange="yesnoCheck(this)" name="discountType" class="custom-select"
+                           <select required onchange="yesnoCheck(this)" name="discountType" class="custom-select"
                               id="inputGroupSelect01">
                               <option selected>Discount Type</option>
                               <option value="Flat">Flat</option>
@@ -30,12 +31,13 @@
 
                      <div class="row" style="margin-top: 3%;">
                         <div class="col">
-                           <input type="text" name="discount" class="form-control" placeholder="Discount">
+                           <input required type="text" name="discount" class="form-control" placeholder="Discount"
+                              pattern="^[0-9]+$" title="invalid discount">
                         </div>
 
                         <div style="display: none;" id="maxdisc" class="col">
                            <input type="text" name="maxDiscountAmount" class="form-control"
-                              placeholder="Max Discount Amount">
+                              placeholder="Max Discount Amount" required pattern="^[0-9]+$" title="invalid discount">
                         </div>
 
                      </div>
@@ -49,8 +51,6 @@
                         <div class="col">
                            <input name="minPurchase" type="text" class="form-control" placeholder="Minimum Purchase">
                         </div>
-
-
                      </div>
 
                      <div class="row" style="margin-top: 3%;">
@@ -71,7 +71,7 @@
                      </div>
                   </form>
                   <p class="text-danger" style="font-size: 13px;margin-top: 10px;">{{adCpnMsg}}</p>
-                                                          
+
                </div>
             </div>
             <script>

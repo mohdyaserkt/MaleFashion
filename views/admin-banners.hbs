@@ -15,13 +15,13 @@
 
                             <div class="row" style="margin-top: 3%;">
                                 <div class="col">
-                                    <input name="mainTitle1" type="text" class="form-control"
-                                        placeholder="Main Title 1">
+                                    <input name="mainTitle1" type="text" required class="form-control"
+                                        placeholder="Main Title 1" pattern="^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$" title="invalid title only aplpha numeric">
                                 </div>
 
                                 <div class="col">
                                     <input name="mainTitle2" type="text" class="form-control"
-                                        placeholder="Main Title 2">
+                                        placeholder="Main Title 2" required pattern="^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$" title="invalid title only aplpha numeric">
                                 </div>
                             </div>
 
@@ -29,7 +29,7 @@
                             <div class="row" style="margin-top: 3%;">
                                 <div class="col">
                                     <input name="description" type="text" class="form-control"
-                                        placeholder="Description">
+                                        placeholder="Description" pattern="^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$" title="invalid title only aplpha numeric" required>
                                 </div>
 
 
@@ -50,10 +50,10 @@
                                 <div class="form-row">
                                     <div class="col">
                                         <label for="exampleInputPlaceholder">Banner Type</label>
-                                        <select name="bannerType" class="form-select" aria-label="Default select example">
-                                            <option selected>Open this select menu</option>
+                                        <select name="bannerType" class="form-select" aria-label="Default select example" required>
+                                           
                                             
-                                            <option>Hero_Section</option>
+                                            <option selected>Hero_Section</option>
                                             <option>Banner_1</option>
                                             <option>Banner_2</option>
                                             <option>Banner_3</option>
@@ -90,6 +90,7 @@
                             <th scope="col">Images</th>
                             <th scope="col">Main Title 1</th>
                             <th scope="col">Main Title 2</th>
+                            <th scope="col">Type</th>
                             
                             <th scope="col">status</th>
                             <th scope="col"></th>
@@ -103,6 +104,7 @@
                             <td><img width="50px" height="50px" src="/bannerImages/{{image}}" alt=""></td>
                             <td>{{mainTitle1}}</td>
                             <td>{{mainTitle2}}</td>
+                            <td>{{bannerType}}</td>
 
                             <td>{{status}}</td>
 
