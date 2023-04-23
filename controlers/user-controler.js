@@ -107,7 +107,7 @@ const userGetLoginOtp = function (req, res, next) {
         }
 
 
-        res.render('user-login-Phone', { message: req.session.message, layout: 'userlayout', forget });
+        res.render('user-login-phone', { message: req.session.message, layout: 'userlayout', forget });
         req.session.message = null
     } catch (error) {
         next()
