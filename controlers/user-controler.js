@@ -612,7 +612,8 @@ const userGetUserProfile = async function (req, res, next) {
         const userAddress = user[0].userAddress
         console.log(userAddress);
         const message = req.session.message
-        res.render('user-profile', { user, message, userAddress, layout: 'userlayout' })
+        const messagechp = req.session.messagechp
+        res.render('user-profile', { user, message,messagechp, userAddress, layout: 'userlayout' })
         req.session.req.session.message = null
     } catch (error) {
         next()
@@ -1625,7 +1626,7 @@ const userPostChangePassword = async (req, res, next) => {
         }
         else {
 
-            req.session.message = "current password is incorrect"
+            req.session.messagechp = "current password is incorrect"
             console.log("current password is incorrect");
             res.redirect('/user-profile#chang-pwd')
         }
