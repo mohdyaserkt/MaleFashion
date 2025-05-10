@@ -41,6 +41,9 @@ hb.handlebars.registerHelper('lst', function (a,b) {
   return a <= b ;
 });
 
+hb.handlebars.registerHelper("json", function (context) {
+    return JSON.stringify(context);
+});
 
 
 

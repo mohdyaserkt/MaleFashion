@@ -49,14 +49,11 @@ const userGetHome = async function (req, res, next) {
         const user = req.session.user
 
 
-        const banners = await adminBannerCollection.find({ status: true, bannerType: "Hero_Section" }).lean()
-        const Deal_Of_the_Week = await adminBannerCollection.find({ status: true, bannerType: "Deal_Of_the_Week" }).lean()
-        const Banner_1 = await adminBannerCollection.find({ status: true, bannerType: "Banner_1" }).lean()
-        const Banner_2 = await adminBannerCollection.find({ status: true, bannerType: "Banner_2" }).lean()
-        const Banner_3 = await adminBannerCollection.find({ status: true, bannerType: "Banner_3" }).lean()
-        const latestProducts = await productCollection.find({ status: true }).sort({ _id: -1 }).limit(8).lean()
+        const Encanto_Hero_Section = await adminBannerCollection.find({ status: true, bannerType: "Encanto_Hero_Section" }).lean()
+        const Encanto_Category_Banners = await adminBannerCollection.find({ status: true, bannerType: "Encanto_Category_Banners" }).sort({ _id: 1 }).limit(3).lean()
+        const latestProducts = await productCollection.find({ status: true }).sort({ _id: -1 }).limit(4).lean()
 
-        res.render('home', { banners, user, layout: 'userlayout', Banner_1, Banner_2, Banner_3, Deal_Of_the_Week, latestProducts });
+        res.render('home', { Encanto_Hero_Section, user, layout: 'userlayout', Encanto_Category_Banners, latestProducts });
     } catch (error) {
         next()
     }
