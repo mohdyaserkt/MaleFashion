@@ -699,7 +699,7 @@ img {
     font-size: 1.5rem;
 }
 
-/* Modal */
+/* Quick View Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -718,6 +718,12 @@ img {
     max-width: 900px;
     position: relative;
     padding: 30px;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .close-modal {
@@ -726,6 +732,11 @@ img {
     right: 15px;
     font-size: 1.5rem;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    color: var(--accent-color);
 }
 
 .modal-product {
@@ -740,6 +751,25 @@ img {
 .modal-product-image img {
     width: 100%;
     height: auto;
+    margin-bottom: 15px;
+}
+
+.image-thumbnails {
+    display: flex;
+    gap: 10px;
+}
+
+.image-thumbnails img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid var(--gray);
+    transition: var(--transition);
+}
+
+.image-thumbnails img:hover {
+    border-color: var(--accent-color);
 }
 
 .modal-product-info {
@@ -761,6 +791,7 @@ img {
 
 .rating {
     margin-bottom: 20px;
+    color: var(--accent-color);
 }
 
 .rating span {
@@ -769,20 +800,63 @@ img {
     margin-left: 10px;
 }
 
-.size-selector, .quantity-selector {
+.color-selector, .size-selector, .quantity-selector {
     margin-bottom: 20px;
+}
+
+.color-selector label, .size-selector label, .quantity-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.color-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.selected {
+    border-color: var(--accent-color);
+}
+
+.color-option.selected::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 10px;
 }
 
 .size-selector select {
     padding: 8px 15px;
-    margin-left: 10px;
+    width: 100%;
+    max-width: 200px;
     border: 1px solid var(--gray);
+    background-color: var(--white);
 }
 
 .quantity-control {
     display: flex;
     align-items: center;
-    margin-top: 10px;
 }
 
 .quantity-control button {
@@ -791,6 +865,7 @@ img {
     background-color: var(--light-gray);
     border: none;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 .quantity-control input {
@@ -801,8 +876,15 @@ img {
     margin: 0 5px;
 }
 
+.add-to-cart {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+}
+
 .product-actions {
     margin-top: 20px;
+    text-align: center;
 }
 
 .add-to-wishlist {
@@ -813,7 +895,7 @@ img {
     display: flex;
     align-items: center;
     gap: 5px;
-    margin-top: 15px;
+    margin: 15px auto 0;
     transition: var(--transition);
 }
 
@@ -821,6 +903,59 @@ img {
     color: var(--accent-color);
 }
 
+.add-to-wishlist i {
+    font-size: 1.2rem;
+}
+
+.product-meta {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray);
+}
+
+.meta-item {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.meta-label {
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.social-share {
+    display: flex;
+    gap: 15px;
+}
+
+.social-share a {
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.social-share a:hover {
+    color: var(--accent-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    .modal-product {
+        flex-direction: column;
+    }
+    
+    .modal-product-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .price {
+        font-size: 1.2rem;
+    }
+}
 /* Responsive Styles */
 @media (max-width: 1200px) {
     .products-grid {
@@ -913,3 +1048,11 @@ img {
         width: 100%;
     }
 }
+
+
+
+
+
+
+
+

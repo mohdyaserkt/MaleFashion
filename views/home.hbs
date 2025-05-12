@@ -15,21 +15,21 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="index.html">ENCANTO VESTE</a>
+                    <a href="/">ENCANTO VESTE</a>
                 </div>
                 <nav class="navbar">
                     <ul>
                         <li><a href="#" class="active">Home</a></li>
-                        <li><a href="#">Shop</a></li>
-                        <li><a href="#">Collections</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/shop">Collections</a></li>
                         <li><a href="#">About</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
                 </nav>
                 <div class="header-icons">
-                    <a href="#"><i class="fas fa-search"></i></a>
-                    <a href="#"><i class="fas fa-user"></i></a>
-                    <a href="#" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    <a href="/shop"><i class="fas fa-search"></i></a>
+                    <a href="/user-profile"><i class="fas fa-user"></i></a>
+                    <a href="/user-cart" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
                 </div>
                 <div class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
@@ -46,9 +46,9 @@
                 <div class="close-menu-btn"><i class="fas fa-times"></i></div>
             </div>
             <ul>
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">Collections</a></li>
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/shop">Collections</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -71,7 +71,7 @@
                 <div class="hero-text">
                     <h1>{{mainTitle1}}</h1>
                     <p>{{description}}</p>
-                    <a href="#" class="btn">Shop Now</a>
+                    <a href="/shop" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-image">
                     <img src={{image}} alt="Fashion Collection">
@@ -90,7 +90,7 @@
                 <div class="category-card">
                     <div class="category-image">
                         <img src={{image}} alt="Men's Collection">
-                        <a href="#" class="overlay-btn">{{mainTitle2}}</a>
+                        <a href="/shop?category={{mainTitle1}}" class="overlay-btn">{{mainTitle2}}</a>
                     </div>
                     <h3>{{mainTitle1}}</h3>
                 </div>
@@ -112,21 +112,21 @@
                     <div class="product-image">
                         <img src={{image.[0]}} alt="Premium Jacket">
                         <div class="product-actions">
-                            <button class="quick-view" data-id={{_id}} data-size="{{json size}}" data-description="{{description}}" data-productInformation="{{productInformation}}">Quick View</button>
-                            <button class="add-to-wishlist"><i class="far fa-heart"></i></button>
+                            <button class="quick-view" data-price="{{price}}" data-id={{productid}} data-images="{{json image}}" data-category="{{category}}" data-sku="{{productid}}" data-colors="{{json colour}}" data-size="{{json size}}" data-description="{{description}}" data-productInformation="{{productInformation}}">Quick View</button>
+                            <button class="add-to-wishlist" onclick="addToWishlist('{{productid}}')"><i class="far fa-heart"></i></button>
                         </div>
                     </div>
                     <div class="product-info">
                         <h3>{{title}}</h3>
                         <div class="price">₹{{price}}</div>
-                        <button class="add-to-cart">Add to Cart</button>
+                        <button class="add-to-cart"  onclick="window.location.href='/product-details/{{_id}}'">Add to Cart</button>
                     </div>
                 </div>
                  {{/each}}
                 
             </div>
             <div class="view-all">
-                <a href="#" class="btn-outline">View All Products</a>
+                <a href="/shop" class="btn-outline">View All Products</a>
             </div>
         </div>
     </section>
@@ -266,49 +266,89 @@
         </div>
     </footer>
 
+    
     <!-- Quick View Modal -->
-    <div class="modal" id="quickViewModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-product">
-                <div class="modal-product-image">
-                    <img src="" alt="Product Image" id="modalProductImage">
+<div class="modal" id="quickViewModal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-product">
+            <div class="modal-product-image">
+                <img src="" alt="Product Image" id="modalProductImage">
+                <div class="image-thumbnails">
+                    <!-- Thumbnails will be added by JS -->
                 </div>
-                <div class="modal-product-info">
-                    <h3 id="modalProductTitle"></h3>
-                    <div class="price" id="modalProductPrice"></div>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span>(24 reviews)</span>
+            </div>
+            <div class="modal-product-info">
+                <h3 id="modalProductTitle"></h3>
+                <div class="price" id="modalProductPrice"></div>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>(24 reviews)</span>
+                </div>
+                <p id="modalProductDescription"></p>
+                
+                <!-- Color Selection -->
+                <div class="color-selector">
+                    <label>Color:</label>
+                    <div class="color-options" id="colorOptions">
+                        <!-- Color options will be added by JS -->
                     </div>
-                    <p id="modalProductDescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <div class="size-selector">
-                        <label>Size:</label>
-                        <select id="modalSizes">
-                        </select>
+                </div>
+                
+                <!-- Size Selection -->
+                <div class="size-selector">
+                    <label>Size:</label>
+                    <select id="sizeSelect">
+                        <!-- Size options will be added by JS -->
+                    </select>
+                </div>
+                
+                <!-- Quantity Selector -->
+                <div class="quantity-selector">
+                    <label>Quantity:</label>
+                    <div class="quantity-control">
+                        <button class="quantity-minus">-</button>
+                        <input type="number" value="1" min="1" id="productQuantity">
+                        <button class="quantity-plus">+</button>
                     </div>
-                    <div class="quantity-selector">
-                        <label>Quantity:</label>
-                        <div class="quantity-control">
-                            <button class="quantity-minus">-</button>
-                            <input type="number" value="1" min="1">
-                            <button class="quantity-plus">+</button>
+                </div>
+                
+                <button id="quickViewAddToCart" class="btn add-to-cart">Add to Cart</button>
+                
+                {{!-- <div class="product-actions">
+                    <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to Wishlist</button>
+                </div> --}}
+                
+                <div class="product-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">SKU:</span>
+                        <span class="meta-value" id="productSKU">EV-2023-001</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Category:</span>
+                        <span class="meta-value" id="productCategory">Men's Fashion</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Share:</span>
+                        <div class="social-share">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-pinterest"></i></a>
                         </div>
-                    </div>
-                    <button class="btn add-to-cart">Add to Cart</button>
-                    <div class="product-actions">
-                        <button class="add-to-wishlist"><i class="far fa-heart"></i> Add to Wishlist</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
+<script src="/js/jquery-3.3.1.min.js"></script>
       <script src="/js/encantoVesteHomePage.js"></script>
+      
+
 </body>
 </html>
     
