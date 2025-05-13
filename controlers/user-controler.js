@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const userCollection = require("../model/userModel");
 
+
+const {randomInt} = require('crypto');
+const rateLimit = require('express-rate-limit');
+
 const nodeMailerOtp = require("../nodeMailer/nodeMail");
 const productCollection = require("../model/productModel");
 const CategoryManagementCollection = require("../model/CategoryManagementModel");
@@ -1208,7 +1212,7 @@ const userPostLoginOtp = async (req, res, next) => {
       }
     } else {
       res.redirect("/user-login-otp");
-      req.session.message = "entered phone not exist";
+      req.session.message = "entered user not exist";
       console.log("entered phone not exist");
     }
   } catch (error) {
@@ -1765,6 +1769,90 @@ const userPostApplyCoupon = async (req, res, next) => {
   }
 };
 
+
+
+// Rate limiting for OTP requests
+const otpLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+  message: 'Too many OTP requests from this IP, please try again later'
+});
+
+// Send OTP endpoint
+const sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userCollection.findOne({ email });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user.status) return res.status(403).json({ message: 'Account is blocked' });
+
+    const otpCode = randomInt(100000, 999999);
+    const expiresAt = new Date(Date.now() + 5 * 60000);
+
+    await verifyOtpCollection.updateOne(
+      { email },
+      { $set: { otpCode, expiresAt, type: 'login' } },
+      { upsert: true }
+    );
+
+    // Send email
+     nodeMailerOtp(otpCode, email);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Verify OTP endpoint
+const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const otpData = await verifyOtpCollection.findOne({ email });
+
+    if (!otpData) return res.status(400).json({ message: 'OTP expired or invalid' });
+    if (otpData.expiresAt < new Date()) return res.status(400).json({ message: 'OTP expired' });
+    if (otpData.otpCode !== parseInt(otp)) return res.status(400).json({ message: 'Invalid OTP' });
+
+    req.session.user = email;
+    await verifyOtpCollection.deleteOne({ email });
+
+    res.json({ 
+      success: true, 
+      redirect: otpData.type === 'forgetpassword' ? '/reset-password' : '/' 
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Resend OTP endpoint
+const resendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userCollection.findOne({ email });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    const otpCode = randomInt(100000, 999999);
+    const expiresAt = new Date(Date.now() + 5 * 60000);
+
+    await verifyOtpCollection.updateOne(
+      { email },
+      { $set: { otpCode, expiresAt } }
+    );
+
+     nodeMailerOtp(otpCode, email);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 module.exports = {
   userGetCartDelete,
   userGetHome,
@@ -1815,4 +1903,9 @@ module.exports = {
   userPostGetProducts,
   userPostApplyCoupon,
   userPostOtpresend,
+
+  sendOTP,
+  verifyOTP,
+  resendOTP,
+  otpLimiter
 };

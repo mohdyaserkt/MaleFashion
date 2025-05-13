@@ -51,6 +51,9 @@ router.get('/sort/:id',userGet.userGetSort)
 
 
 //postRequests
+router.post('/api/send-otp',verifynotlogin, userPost.sendOTP);
+router.post('/api/verify-otp', verifynotlogin,userPost.verifyOTP);
+router.post('/api/resend-otp',verifynotlogin, userPost.otpLimiter, userPost.resendOTP);
 
 router.post('/user-signup',verifynotlogin,userPost.userPostSignup)
 router.post('/user-login-email',verifynotlogin,userPost.userPostLoginEmail)
@@ -69,6 +72,7 @@ router.post('/get-products',userPost.userPostGetProducts)
 router.post('/apply-coupon',verifylogin,userPost.userPostApplyCoupon)
 router.post('/otp-resend/',userGet.userPostOtpresend)
 router.post('/add-to-wishlist',verifylogin,userGet.userPostAddToWishlist)
+
 
 
 

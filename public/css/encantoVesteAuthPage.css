@@ -284,3 +284,75 @@ h1 {
     padding: 2rem 1rem;
   }
 }
+
+
+/* ----- OTP Specific Styles ----- */
+.otp-container {
+  display: flex;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.otp-container input {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.otp-container input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.otp-resend {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--light-text);
+  margin-bottom: 1.5rem;
+}
+
+.otp-resend a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.btn-password {
+  width: 100%;
+  background: white;
+  color: var(--primary);
+  border: 1px solid var(--border);
+}
+
+.btn-password:hover {
+  border-color: var(--accent);
+}
+
+.btn-password i {
+  margin-right: 0.5rem;
+}
+
+/* ----- Signup Specific Styles ----- */
+.password-hints {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--light-text);
+}
+
+.terms {
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--light-text);
+}
+
+.terms a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
