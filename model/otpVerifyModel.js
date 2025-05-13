@@ -41,6 +41,10 @@ const verifyOtpSchema=new mongoose.Schema({
     type:{
         type:String,
     required:true},
+    verified:{
+        type:Boolean,
+    },
+    
 
     
 

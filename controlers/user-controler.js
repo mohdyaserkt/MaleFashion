@@ -1958,6 +1958,102 @@ const signupVerify = async (req, res) => {
 };
 
 
+// Rate limiter
+const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many password reset attempts'
+});
+
+// Request Password Reset
+const requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userCollection.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const otpCode =randomInt(100000, 999999);
+    const expiresAt = new Date(Date.now() + 10 * 60000); // 10 minutes
+
+    await verifyOtpCollection.updateOne(
+      { email },
+      { $set: { otpCode, expiresAt, type: 'forgetpassword' } },
+      { upsert: true }
+    );
+
+     nodeMailerOtp(otpCode, email);
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Server error during password reset' });
+  }
+};
+
+// Verify Password Reset OTP
+const verifyPasswordReset = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const otpData = await verifyOtpCollection.findOne({ email });
+
+    if (!otpData || otpData.type !== 'forgetpassword') {
+      return res.status(400).json({ message: 'Invalid verification request' });
+    }
+
+    if (otpData.expiresAt < new Date()) {
+      return res.status(400).json({ message: 'OTP expired' });
+    }
+
+    if (otpData.otpCode !== parseInt(otp)) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Mark OTP as verified (but don't delete yet - we'll use it to verify the email in the next step)
+    await verifyOtpCollection.updateOne(
+      { email },
+      { $set: { verified: true } }
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error during verification' });
+  }
+};
+
+// Update Password
+const updatePassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Verify that OTP was previously verified
+    const otpData = await verifyOtpCollection.findOne({ 
+      email, 
+      type: 'forgetpassword',
+      verified: true 
+    });
+
+    if (!otpData) {
+      return res.status(400).json({ message: 'Unauthorized password reset' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    await userCollection.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
+
+    // Clean up
+    await verifyOtpCollection.deleteOne({ email });
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error during password update' });
+  }
+};
+
 module.exports = {
   userGetCartDelete,
   userGetHome,
@@ -2017,5 +2113,10 @@ module.exports = {
 
   signupInit,
   signupVerify,
-  signupLimiter
+  signupLimiter,
+
+   requestPasswordReset,
+  verifyPasswordReset,
+  updatePassword,
+  passwordResetLimiter
 };

@@ -58,6 +58,12 @@ router.post('/api/resend-otp',verifynotlogin, userPost.otpLimiter, userPost.rese
 router.post('/api/signup-init', userPost.signupLimiter, userPost.signupInit);
 router.post('/api/signup-verify', userPost.signupVerify);
 
+//forgetpassword
+
+router.post('/api/request-password-reset', userPost.passwordResetLimiter, userPost.requestPasswordReset);
+router.post('/api/verify-password-reset', userPost.verifyPasswordReset);
+router.post('/api/update-password', userPost.updatePassword);
+
 
 router.post('/user-signup',verifynotlogin,userPost.userPostSignup)
 router.post('/user-login-email',verifynotlogin,userPost.userPostLoginEmail)
