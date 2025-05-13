@@ -1852,6 +1852,111 @@ const resendOTP = async (req, res) => {
   }
 };
 
+//signup
+
+
+
+// Rate limiter
+const signupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many signup attempts from this IP'
+});
+
+// Signup Initiation
+const signupInit = async (req, res) => {
+  try {
+    const { name, email, phone, password } = req.body;
+
+    // Validate inputs
+    if (!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    // Check existing users
+    const existingUser = await userCollection.findOne({
+      $or: [{ email }, { phone }]
+    });
+
+    if (existingUser) {
+      const field = existingUser.email === email ? 'email' : 'phone';
+      return res.status(409).json({ message: `${field} already registered` });
+    }
+
+    // Generate OTP
+    const otpCode = randomInt(100000, 999999);
+    const expiresAt = new Date(Date.now() + 10 * 60000); // 10 minutes
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Store in verify collection
+    await verifyOtpCollection.updateOne(
+      { email },
+      {
+        $set: {
+          name,
+          email,
+          phone,
+          password: hashedPassword,
+          otpCode,
+          expiresAt,
+          type: 'register'
+        }
+      },
+      { upsert: true }
+    );
+
+    // Send OTP email
+     nodeMailerOtp(otpCode, email);
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error during registration' });
+  }
+};
+
+// OTP Verification
+const signupVerify = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const otpData = await verifyOtpCollection.findOne({ email });
+
+    if (!otpData || otpData.type !== 'register') {
+      return res.status(400).json({ message: 'Invalid verification request' });
+    }
+
+    if (otpData.expiresAt < new Date()) {
+      return res.status(400).json({ message: 'OTP expired' });
+    }
+
+    if (otpData.otpCode !== parseInt(otp)) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Create user
+    const newUser = new userCollection( {
+      name: otpData.name,
+      email: otpData.email,
+      phone: otpData.phone,
+      password: otpData.password,
+      status: true,
+      username:otpData.name+randomInt(1000, 9999),
+      createdAt: new Date()
+    });
+    await newUser.save(); 
+    await verifyOtpCollection.deleteOne({ email });
+
+    // Create session
+    req.session.user = email;
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Server error during verification' });
+  }
+};
+
 
 module.exports = {
   userGetCartDelete,
@@ -1907,5 +2012,10 @@ module.exports = {
   sendOTP,
   verifyOTP,
   resendOTP,
-  otpLimiter
+  otpLimiter,
+
+
+  signupInit,
+  signupVerify,
+  signupLimiter
 };

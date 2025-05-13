@@ -51,9 +51,13 @@ router.get('/sort/:id',userGet.userGetSort)
 
 
 //postRequests
-router.post('/api/send-otp',verifynotlogin, userPost.sendOTP);
+router.post('/api/send-otp',verifynotlogin,userPost.otpLimiter, userPost.sendOTP);
 router.post('/api/verify-otp', verifynotlogin,userPost.verifyOTP);
 router.post('/api/resend-otp',verifynotlogin, userPost.otpLimiter, userPost.resendOTP);
+
+router.post('/api/signup-init', userPost.signupLimiter, userPost.signupInit);
+router.post('/api/signup-verify', userPost.signupVerify);
+
 
 router.post('/user-signup',verifynotlogin,userPost.userPostSignup)
 router.post('/user-login-email',verifynotlogin,userPost.userPostLoginEmail)
