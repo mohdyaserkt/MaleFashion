@@ -89,5 +89,23 @@
       </div>
     </div>
   </div>
+
+    <script >
+      document.querySelectorAll('.toggle-password').forEach(button => {
+  button.addEventListener('click', function() {
+    const icon = this.querySelector('i');
+    const input = this.parentElement.querySelector('input');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
+});
+    </script>
+  
 </body>
 </html>

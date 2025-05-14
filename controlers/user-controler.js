@@ -1451,64 +1451,72 @@ const userPostEditPersonalDetails = async (req, res, next) => {
   try {
     const userDetails = req.body;
 
-    const findUsername = await userCollection
-      .findOne({ username: userDetails.username })
-      .lean();
-    const findEmail = await userCollection
-      .findOne({ email: userDetails.email })
-      .lean();
-    const findPhone = await userCollection
-      .findOne({ phone: userDetails.phone })
-      .lean();
+    // Find the current user's record by email (email is not editable)
+    const currentUser = await userCollection.findOne({ email: req.session.user });
 
-    if (findUsername == null && findEmail == null && findPhone == null) {
-      await userCollection.updateOne(
-        { email: req.session.user },
-        {
-          $set: {
-            name: userDetails.name,
-            username: userDetails.username,
-            phone: userDetails.phone,
-            email: userDetails.email,
-          },
-        }
-      );
-      req.session.user = userDetails.email;
-      req.session.message = "profile edited Succesfully";
-      res.redirect("/user-profile");
-    } else {
-      let exist = {
-        username: false,
-        email: false,
-        phone: false,
-      };
-      if (findUsername != null) {
-        exist.username = true;
-      }
-      if (findEmail != null) {
-        exist.email = true;
-      }
-      if (findPhone != null) {
-        exist.phone = true;
-      }
+    if (!currentUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-      console.log("profile edit failed user exist");
+    // Check for duplicate username (used by someone else)
+    if (userDetails.username !== currentUser.username) {
+      const usernameExists = await userCollection.findOne({
+        username: userDetails.username,
+        _id: { $ne: currentUser._id }, // exclude current user
+      });
 
-      if (exist.username) {
-        req.session.message = "entered username not Available";
-        res.redirect("/user-profile");
-      } else if (exist.email) {
-        req.session.message = "already have a account with this  email";
-        res.redirect("/user-profile");
-      } else if (exist.phone) {
-        req.session.message = "entered phone  already used";
-        res.redirect("/user-profile");
+      if (usernameExists) {
+        return res.status(409).json({
+          success: false,
+          message: "Update failed: Username already in use",
+        });
       }
     }
+
+    // Check for duplicate phone (used by someone else)
+    if (userDetails.phone !== currentUser.phone) {
+      const phoneExists = await userCollection.findOne({
+        phone: userDetails.phone,
+        _id: { $ne: currentUser._id }, // exclude current user
+      });
+
+      if (phoneExists) {
+        return res.status(409).json({
+          success: false,
+          message: "Update failed: Phone number already in use",
+        });
+      }
+    }
+
+    // Proceed to update allowed fields
+    await userCollection.updateOne(
+      { _id: currentUser._id },
+      {
+        $set: {
+          name: userDetails.name,
+          username: userDetails.username,
+          phone: userDetails.phone,
+        },
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+    });
+
   } catch (error) {
-    next();
+    console.error("Update error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
+
 
 const userPostChangePassword = async (req, res, next) => {
   try {
