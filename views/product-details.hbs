@@ -1,279 +1,469 @@
-{{>user-header}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | Encanto Veste</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <link rel="stylesheet" href="/css/encantoVesteProductDetailsPage.css"> 
+    <style>
+        /* Your existing CSS styles here */
+        /* Add any additional styles needed for the functionality */
+        .out-of-stock {
+            background-color: #dc3545 !important;
+            cursor: not-allowed;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+  <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">ENCANTO VESTE</a>
+                </div>
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-icons">
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="#"><i class="fas fa-user"></i></a>
+                    <a href="#" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">3</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <!-- Shop Details Section Begin -->
-    {{#each product}}
-    <section class="shop-details">
-        <div class="product__details__pic">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__details__breadcrumb">
-                            <a href="/">Home</a>
-                            <a href="/shop">Shop</a>
-                            <span>Product Details</span>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="thumbnail-list">
+                        {{#each product}}
+                        {{#each image}}
+                        <div class="thumbnail-item {{#if @first}}active{{/if}}">
+                            <img src="{{this}}" alt="Product Thumbnail" id="thumb-{{inc @index}}" onclick="zoom(this.id)">
                         </div>
+                        {{/each}}
+
+                        
+                    </div>
+                    <div class="main-image">
+                        <img src="{{image.[0]}}" alt="{{product.title}}" id="imgView">
+                        {{#if product.bestseller}}<div class="product-badge">Bestseller</div>{{/if}}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3">
-                        <ul class="nav nav-tabs" role="tablist">
-
-                            {{#each image}}
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="" style="margin-bottom: 2rem;" >
-                                    <img src="/productImages/{{this}}" alt="" id="{{inc @index}}" onclick="zoom(this.id)">
-                                    </div>
-                                </a>
-                            </li>
-                            {{/each}}
-                            
-                        </ul>
-                        <script>
-                            function zoom(id){
-                               img= document.getElementById(id).src 
-                               document.getElementById('imgView').src=img
-
-                            }
-                        </script>
+                    
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">{{title}}</h1>
+                    <p class="product-subtitle">{{description}}</p>
+                    
+                    <div class="product-price">
+                        ₹{{price}} {{#if oldPrice}}<span class="old-price">₹{{oldPrice}}</span>{{/if}}
                     </div>
-                    <div class="col-lg-6 col-md-9">
-                        <div class="tab-content">
+                    
+                    
+                      <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="review-count">(24 reviews)</span>
+                    </div>
+                    
+                    <p class="product-description">
+                        {{productInformation}}
+                    </p>
+                 
+                    <form action="/user-addtocart/{{productid}}" method="post">
+                    <div class="product-options">
+                        <div class="option-title">Color</div>
+                        <div class="color-options">
                             
-                            <div class="tab-pane active" id="tabs-3" role="tabpanel">
-                                <div class="product__details__pic__item">
-                                    
-                                    <img style="height: 33rem" id="imgView" src="/productImages/{{image.[0]}}"  alt="">
-                                </div>
+                            {{#each colour}}
+                            <div class="color-option {{#if @first}}selected{{/if}}" style="background-color: {{this}};" data-color="{{this}}">
+                                <input hidden type="radio" name="colour" value="{{this}}" id="color-{{@index}}" {{#if @first}}checked{{/if}} required>
                             </div>
+                            {{/each}}
+                        </div>
                           
+                        <div class="option-title">Size</div>
+                        <div class="size-options">
+                            {{#each size}}
+                            <div class="size-option {{#if @first}}selected{{/if}}">
+                                <input hidden ="radio" name="size" value="{{this}}" id="size-{{@index}}" {{#if @first}}checked{{/if}} required>
+                                <label for="size-{{@index}}">{{this}}</label>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <a href="#" class="size-guide-link">Size Guide</a>
+                        
+                        <div class="option-title">Quantity</div>
+                        <div class="quantity-selector">
+                            <button type="button" class="quantity-btn minus">-</button>
+                            <input type="number" class="quantity-input" name="quantity" value="1" min="1">
+                            <button type="button" class="quantity-btn plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        {{#if (eq stock 0)}}
+                        <button type="button" class="btn add-to-cart out-of-stock" disabled>Out Of Stock</button>
+                        {{else}}
+                        <button type="submit" class="btn add-to-cart">Add to Cart</button>
+                        {{/if}}
+                        <button type="button" class="wishlist-btn" onclick="addToWishlist('{{productid}}')">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <p class="error-message">{{adCrtMsg}}</p>
+                    </form>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">SKU:</span>
+                            <span class="meta-value">EV-2023-001</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Category:</span>
+                            <span class="meta-value">{{category}}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Tags:</span>
+                            <span class="meta-value">Leather, Premium, Bestseller</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        
-        <div class="product__details__content">
-            <div class="container">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="product__details__text">
-                            <h4>{{title}}</h4>
-                            {{!-- <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                
-                            </div> --}}
-                            <h3>₹{{price}} <span></span></h3>
-                            <p>{{description}}</p>
-
-                            <form action="/user-addtocart/{{productid}}" method="post">
-                            <div class="product__details__option">
-                                <div class="product__details__option__size">
-                                    <span>Size:</span>
-                                    {{#each size}}
-                                     <label  for="{{this}}">{{this}}
-                                        <input required  name="size" value="{{this}}" type="radio" id="{{this}}">
-                                    </label>
-                                    {{/each}}
-                        
-                                </div>
-                                <div class="product__details__option__color">
-                                    <span>Color:</span>
-                                    {{#each colour}}
-                                    <label style="background-color: {{this}};" class="c-1" for="{{this}}">
-                                        <input required name="colour" value="{{this}}" type="radio" id="{{this}}">
-                                    </label>
-                                    {{/each}}
-                                </div>
-                            </div>
-                            <div class="product__details__cart__option">
-                                <div class="quantity">
-                                    {{!-- <div class="pro-qty"> --}}
-                                        <input hidden name="quantity" type="text" value="1">
-                                    {{!-- </div> --}}
-                                </div>
-                                {{#if (eq stock 0)}}
-
-                                <button disabled class="primary-btn bg-danger">Out Of Stock</button>
-                                {{else}}
-                                <button type="submit" onclick="helo()" class="primary-btn">add to cart</button>
-                                {{/if}}
-                                <p class="text-danger" style="font-size: 13px;">{{adCrtMsg}}</p>
-                            </div></form>
-                            <div class="product__details__btns__option">
-                                <i onclick="addToWishlist('{{productid}}')" class="fa fa-heart"></i> add to wishlist
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
+             
+            <!-- Product Tabs -->
+            <div class="product-tabs" style="margin-top: 120px;">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description">Description</button>
+                    <button class="tab-btn" data-tab="specs">Specifications</button>
+                    <button class="tab-btn" data-tab="reviews">Reviews</button>
+                    <button class="tab-btn" data-tab="shipping">Shipping & Returns</button>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__details__tab">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                    role="tab">Description</a>
-                                </li>
-                                
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tabs-5" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note">{{title}}</p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>{{productInformation}}</p>
-                                            
-                                        </div>
-                                        {{!-- <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                        </div> --}}
-                                    </div>
-                                </div>
-                                
+                
+                <div class="tab-content active" id="description">
+                    <h3>Product Story</h3>
+                    <p>{{description}}</p>
+                    <p>The product features:</p>
+                    <ul>
+                        {{#each features}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="specs">
+                    <table class="specs-table">
+                        
+                        <tr>
+                            <td>{{productInformation}}</td>
+                            
+                        </tr>
+                       
+                    </table>
+                </div>
+                
+                <div class="tab-content" id="reviews">
+                    <h3>Customer Reviews</h3>
+                    {{#if reviews}}
+                        {{#each reviews}}
+                        <div class="review-item">
+                            <div class="review-author">{{this.author}}</div>
+                            <div class="review-rating">
+                                {{#times this.rating}}<i class="fas fa-star"></i>{{/times}}
                             </div>
+                            <div class="review-text">{{this.text}}</div>
+                            <div class="review-date">{{this.date}}</div>
                         </div>
-                    </div>
+                        {{/each}}
+                    {{else}}
+                    <p>No reviews yet. Be the first to review this product!</p>
+                    {{/if}}
+                </div>
+                
+                 <div class="tab-content" id="shipping">
+                    <h3>Shipping Information</h3>
+                    <p>We offer worldwide shipping with the following options:</p>
+                    <ul>
+                        <li>Standard Shipping: 5-7 business days </li>
+                        <li>Express Shipping: 2-3 business days </li>
+                        <li>International Shipping: 7-14 business days </li>
+                    </ul>
+                    <h3>Returns Policy</h3>
+                    <p>We offer a 30-day return policy for unworn, undamaged items with original tags attached. Leather goods must be returned in their original packaging.</p>
                 </div>
             </div>
         </div>
     </section>
     {{/each}}
-    <!-- Shop Details Section End -->
-
-    <!-- Related Section Begin -->
-    <section class="related spad">
+    <!-- Related Products -->
+    <section class="related-products">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="related-title">Related Product</h3>
-                </div>
-            </div>
-            <div class="row">
+            <h2 class="section-title">You May Also Like</h2>
+            <div class="products-grid">
                 {{#each relatedProducts}}
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                    <div class="product__item">
-                        <div style="height: 28rem;" class="product__item__pic set-bg" data-setbg="/productImages/{{image.[0]}}">
-                            <ul class="product__hover">
-                                <li onclick="addToWishlist('{{productid}}')"><img src="/img/icon/heart.png" alt=""></li>
-                                {{!-- <li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li> --}}
-                                <li><a href="#"><img src="/img/icon/search.png" alt=""></a></li>
-                            </ul>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{image.[0]}}" alt="{{title}}">
+                        <div class="product-actions">
+                            <button class="quick-view" onclick="window.location.href='/product-details/{{_id}}'">Quick View</button>
+                            <button class="add-to-wishlist" onclick="addToWishlist('{{productid}}')"><i class="far fa-heart"></i></button>
                         </div>
-                        <div class="product__item__text">
-                            <h6>{{title}}</h6>
-                            <a href="/product-details/{{_id}}" class="add-cart">+ Add To Cart</a>
-                            {{!-- <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div> --}}
-                            <h5>₹{{price}}</h5>
-                            {{!-- <div class="product__color__select">
-                                <label for="pc-4">
-                                    <input type="radio" id="pc-4">
-                                </label>
-                                <label class="active black" for="pc-5">
-                                    <input type="radio" id="pc-5">
-                                </label>
-                                <label class="grey" for="pc-6">
-                                    <input type="radio" id="pc-6">
-                                </label>
-                            </div> --}}
-                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>{{title}}</h3>
+                        <div class="price">₹{{price}}</div>
+                        <button class="btn add-to-cart" onclick="window.location.href='/product-details/{{_id}}'">View Details</button>
                     </div>
                 </div>
                 {{/each}}
-                
-                
+            </div>
+            <div class="view-all">
+                <a href="/shop" class="btn-outline">View All Products</a>
             </div>
         </div>
     </section>
-    <!-- Related Section End -->
-    <script>
-        function helo(){
-        const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        iconColor: '#a5dc86',
-                                        background: 'black',
-                                        color: '#a5dc86',
-
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                        }
-                                    })
-
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Product Added TO Wishlist'
-                                    })
-    </script>
-
     
+ <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ENCANTO VESTE</h3>
+                    <p>Premium fashion for those who appreciate quality and timeless style.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#">Men's Collection</a></li>
+                        <li><a href="#">Women's Collection</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Encanto Veste. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-  {{>user-footer}}
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-                    function addToWishlist(id) {
+    <script>
+        // Image zoom functionality
+        function zoom(id) {
+            const img = document.getElementById(id).src;
+            document.getElementById('imgView').src = img;
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById(id).parentElement.parentElement.classList.add('active');
+        }
 
-                        $.ajax({
-                            url: '/add-to-wishlist',
-                            data: {
-                                productid: id
-                            },
-                            method: 'POST',
-                            success: (response) => {
-                                if (response.status == true) {
-
-
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        iconColor: '#a5dc86',
-                                        background: 'black',
-                                        color: '#a5dc86',
-
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                        }
-                                    })
-
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Product Added TO Wishlist'
-                                    })
-
-
-
-                                }
+        // Add to wishlist functionality
+        function addToWishlist(id) {
+            $.ajax({
+                url: '/add-to-wishlist',
+                data: {
+                    productid: id
+                },
+                method: 'POST',
+                success: (response) => {
+                    if (response.status == true) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            iconColor: '#a5dc86',
+                            background: 'black',
+                            color: '#a5dc86',
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
                             }
-                        })
+                        });
 
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Product Added To Wishlist'
+                        });
 
+                        // Update heart icon
+                        const wishlistBtn = document.querySelector(`.wishlist-btn[onclick="addToWishlist('${id}')"]`);
+                        if (wishlistBtn) {
+                            const icon = wishlistBtn.querySelector('i');
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                            wishlistBtn.classList.add('active');
+                        }
                     }
-                </script>
+                },
+                error: (error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.responseJSON.message || 'Failed to add to wishlist'
+                    });
+                }
+            });
+        }
+
+        // Quantity selector functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quantity buttons
+            document.querySelectorAll('.quantity-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('.quantity-input');
+                    let value = parseInt(input.value);
+                    
+                    if (this.classList.contains('minus') && value > 1) {
+                        input.value = value - 1;
+                    } else if (this.classList.contains('plus')) {
+                        input.value = value + 1;
+                    }
+                });
+            });
+
+            // Color selection
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                });
+            });
+
+            // Size selection
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.size-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                });
+            });
+
+            // Tab functionality
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Mobile menu toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navbar = document.querySelector('.navbar');
+            
+            if (menuToggle && navbar) {
+                menuToggle.addEventListener('click', function() {
+                    navbar.classList.toggle('active');
+                    this.querySelector('i').classList.toggle('fa-bars');
+                    this.querySelector('i').classList.toggle('fa-times');
+                });
+            }
+
+            // Show success message if added to cart
+            {{#if adCrtMsg}}
+            {{#unless (eq adCrtMsg "Out of stock")}}
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                iconColor: '#a5dc86',
+                background: 'black',
+                color: '#a5dc86',
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Product Added To Cart'
+            });
+            {{/unless}}
+            {{/if}}
+        });
+    </script>
+</body>
+</html>
