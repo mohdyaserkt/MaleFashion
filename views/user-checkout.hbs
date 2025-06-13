@@ -1,398 +1,352 @@
-{{>user-header}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Encanto Veste</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="\css\encantoVesteCheckoutPage.css">
 
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Check Out</h4>
-                    <div class="breadcrumb__links">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Check Out</span>
-                    </div>
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">ENCANTO VESTE</a>
+                </div>
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-icons">
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="#"><i class="fas fa-user"></i></a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">3</span></a>
+                </div>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <div class="logo">ENCANTO VESTE</div>
+                <div class="close-menu-btn"><i class="fas fa-times"></i></div>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="collections.html">Collections</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-footer">
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
                 </div>
             </div>
         </div>
     </div>
-</section>
-<!-- Breadcrumb Section End -->
 
-<!-- Checkout Section Begin -->
-<section class="checkout spad">
-    <div class="container">
-        <div class="checkout__form">
+    <!-- Checkout Section -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-header">
+                <h1 class="section-title">Checkout</h1>
+                <div class="checkout-steps">
+                    <div class="step">
+                        <span>1</span>
+                        <p>Shopping Cart</p>
+                    </div>
+                    <div class="step active">
+                        <span>2</span>
+                        <p>Checkout</p>
+                    </div>
+                    <div class="step">
+                        <span>3</span>
+                        <p>Order Complete</p>
+                    </div>
+                </div>
+            </div>
 
-            <form name="sub" id="checkoutform" role="form" onsubmit="disableButton()" action="" method="">
-                <div class="row">
-                    <div class="col-lg-8 col-md-6">
-
-                        <div class="row">
-                            {{!-- <a href="/saved-address"> --}}
-                                <button data-toggle="modal" data-target=".bd-example-modal-lg"
-                                    style="float: right;width: 100%; background: black;" type="button"
-                                    class="mt-2 btn  btn-dark  btn-with-icon"><i class="ri-bill-fill"></i>Select
-                                    Saved Address for Checkout</button>
-                                {{!-- </a> --}}
-
-
-
-
-
-
-
-
-
-                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
-                                aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div style="padding: 22px;" class="modal-content">
-
-                                        {{#if savedAddress}}
-                                        {{#each chooseaddress}}
-                                        <div class="card" style="margin-bottom: 3%;">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Address No:{{inc @index}}</h5>
-                                                <p class="card-text">
-                                                <div style="width: 50%;       float: left;">
-                                                    <p class="card-text">Name : {{name}} <br> Phone : {{phone}}<br>
-                                                        Address : {{address}}<br> Locality : {{locality}}<br> City :
-                                                        {{city}}</p>
-                                                </div>
-                                                <div style="width: 50%; margin-bottom: 4%;      float: left;">
-                                                    <p class="card-text"> Landmark : {{landmark}}<br> State :
-                                                        {{state}} <br> Pincode : {{pincode}}<br> Alternative Phone :
-                                                        {{alternativephone}}</p>
-                                                </div>
-                                                </p>
-                                                <a href="/saved-address-choose/{{addressId}}"
-                                                    class="btn btn-dark">Choose</a>
-                                            </div>
-                                        </div>
-                                        {{/each}}
-                                        {{else}}
-                                        <p class="text-danger" style="text-align: center;">YOU DONT HAVE ANY SAVED
-                                            ADDRESS</p>
-                                        {{/if}}
-                                        <a href="/saved-address" class="btn btn-dark">Add New Address</a>
-
-
-
-                                    </div>
-                                </div>
+            <div class="checkout-content">
+                <div class="checkout-form">
+                    <h2>Billing Details</h2>
+                    
+                    <!-- Saved Addresses -->
+                    <div class="saved-addresses">
+                        <h3>Select Saved Address</h3>
+                        <div class="address-options">
+                            <div class="address-option selected">
+                                <input type="radio" name="saved-address" id="address-1" checked>
+                                <label for="address-1">
+                                    <strong>Home</strong>
+                                    <p>123 Fashion Street, Apt 4B</p>
+                                    <p>New York, NY 10001</p>
+                                    <p>United States</p>
+                                    <p>Phone: (123) 456-7890</p>
+                                </label>
                             </div>
-
-
-
-
-
-
-
-
-
-                        </div>
-                        <h6 style="margin-top: 3%" class="checkout__title">Billing Details</h6>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Fist Name<span>*</span></p>
-                                    <input id="name" name="name" value="{{userData.[0].address.name}}" type="text"
-                                        pattern="^[A-Za-z]+$"
-                                        title="Please enter a valid first name containing only alphabetic characters."
-                                        required>
-                                </div>
+                            <div class="address-option">
+                                <input type="radio" name="saved-address" id="address-2">
+                                <label for="address-2">
+                                    <strong>Work</strong>
+                                    <p>456 Design Avenue, Floor 12</p>
+                                    <p>New York, NY 10005</p>
+                                    <p>United States</p>
+                                    <p>Phone: (123) 456-7891</p>
+                                </label>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Locality<span>*</span></p>
-                                    <input id="locality" value="{{userData.[0].address.locality}}" name="locality"
-                                        type="text" pattern="^[A-Za-z]+$"
-                                        title="Please enter a valid locality containing only alphabetic characters."
-                                        required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Landmark<span>*</span></p>
-                            <input id="landmark" name="landmark" value="{{userData.[0].address.landmark}}" type="text"
-                                pattern="^[A-Za-z0-9\s]+$"
-                                title="Please enter a valid landmark containing alphabetic characters, digits, and spaces."
-                                required>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Address<span>*</span></p>
-                            <input id="address" name="address" value="{{userData.[0].address.address}}" type="text"
-                                placeholder="Street Address" class="checkout__input__add" pattern="^[A-Za-z0-9\s]+$"
-                                title="Please enter a valid address containing alphabetic characters, digits, and spaces."
-                                required>
-                            {{!-- <input type="text" placeholder="Apartment, suite, unite ect (optinal)"> --}}
-                        </div>
-                        <div class="checkout__input">
-                            <p>Town/City<span>*</span></p>
-                            <input id="city" name="city" value="{{userData.[0].address.city}}" type="text"
-                                pattern="^[A-Za-z]+$"
-                                title="Please enter a valid town/city containing only alphabetic characters." required>
-                        </div>
-                        <div class="checkout__input">
-                            <p>State<span>*</span></p>
-                            <input id="state" name="state" value="{{userData.[0].address.state}}" type="text"
-                                pattern="^[A-Za-z\s]+$"
-                                title="Please enter a valid state containing only alphabetic characters." required>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Postcode / ZIP<span>*</span></p>
-                            <input id="pincode" name="pincode" value="{{userData.[0].address.pincode}}" type="text"
-                                pattern="^[0-9]{6}$" title="Please enter a valid 6-digit postcode/ZIP code." required>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Phone<span>*</span></p>
-                                    <input id="phone" name="phone" value="{{userData.[0].address.phone}}" type="text"
-                                        pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number."
-                                        required>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="checkout__input">
-                                    <p>Alternative Phone<span></span></p>
-                                    <input id="alternativephone" name="alternativephone"
-                                        value="{{userData.[0].address.alternativephone}}" type="text"
-                                        pattern="^[0-9]{10}$" title="Please enter a valid 10-digit phone number.">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="checkout__input__checkbox">
-
-                        </div>
-                        <div class="checkout__input">
-
-                        </div>
-                        <div class="checkout__input__checkbox">
-
-                        </div>
-                        <div class="checkout__input">
-
+                            <button class="btn-outline add-new-address">
+                                <i class="fas fa-plus"></i> Add New Address
+                            </button>
                         </div>
                     </div>
-                    <style>
 
-                    </style>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="checkout__order">
-                            <h4 class="order__title">Your order</h4>
-                            <div style="padding: 1rem;background-color: black;" class="card card-block mb-5">
-                                <h4 class="card-title  " style="text-align: center;color: white; "> <b>WALLET</b> </h4>
-                                {{#if walletBalance.wallet}}
-                                <h5 style="text-align: center;color: white;"> <b>Balance: ₹ {{walletBalance.wallet}}</b>
-                                    </h4>
-                                    {{else}}
-                                    <h5 style="text-align: center;color: white;"> <b>Balance: ₹ 0</b> </h4>
-                                        {{/if}}
-
+                    <!-- Billing Form -->
+                    <form id="billing-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name*</label>
+                                <input type="text" id="first-name" required>
                             </div>
-
-                            <div class="checkout__order__products">Product <span>Total</span></div>
-                            <ul class="checkout__total__products">
-                                {{#each chkoutorders}}
-                                <li>0{{inc @index}}. {{product.title}} <span>₹ {{totalprice}}.0</span></li>
-                                {{/each}}
-                            </ul>
-                            <ul class="checkout__total__all">
-                                <li>Subtotal <span>₹{{subtotal}}</span></li>
-                                {{#if (eqn total)}}
-                                <li>Total <span>₹{{subtotal}}</span></li>
-                                {{else}}
-                                <li>Total <span>₹{{total}}</span></li>
-                                {{/if}}
-
-                            </ul>
-                            {{#if (eqn total)}}
-                            {{#if (lst subtotal walletBalance.wallet)}}
-                            <div class="checkout__input__checkbox">
-
-                                <label for="Wallet">
-                                    Wallet
-                                    <input name="paymentmethod" value="Wallet"
-                                        onchange="uncheck('onlinePayment','cod'),enableButton2()" type="checkbox"
-                                        id="Wallet">
-                                    <span class="checkmark"></span>
-                                </label>
+                            <div class="form-group">
+                                <label for="last-name">Last Name*</label>
+                                <input type="text" id="last-name" required>
                             </div>
-                            {{/if}}
-                            {{else}}
-                            {{#if (lst total walletBalance.wallet)}}
-                            <div class="checkout__input__checkbox">
-
-                                <label for="Wallet">
-                                    Wallet
-                                    <input name="paymentmethod" value="Wallet"
-                                        onchange="uncheck('onlinePayment','cod'),enableButton2()" type="checkbox"
-                                        id="Wallet">
-                                    <span class="checkmark"></span>
-                                </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address*</label>
+                            <input type="text" id="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="locality">Locality*</label>
+                            <input type="text" id="locality" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="landmark">Landmark</label>
+                            <input type="text" id="landmark">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">Town/City*</label>
+                                <input type="text" id="city" required>
                             </div>
-                            {{/if}}
+                            <div class="form-group">
+                                <label for="state">State*</label>
+                                <input type="text" id="state" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="postcode">Postcode/ZIP*</label>
+                                <input type="text" id="postcode" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country*</label>
+                                <select id="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="US" selected>United States</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="AU">Australia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone*</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alt-phone">Alternative Phone</label>
+                                <input type="tel" id="alt-phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="order-notes">Order Notes (Optional)</label>
+                            <textarea id="order-notes" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                        </div>
+                    </form>
+                </div>
 
-                            {{/if}}
+                <div class="order-summary">
+                    <h2>Your Order</h2>
+                    <div class="order-details">
+                        <div class="order-header">
+                            <div class="product-col">Product</div>
+                            <div class="total-col">Total</div>
+                        </div>
+                        <div class="order-items">
+                            <div class="order-item">
+                                <div class="product-col">Premium Leather Jacket × 1</div>
+                                <div class="total-col">$249.99</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="product-col">Silk Evening Blouse × 1</div>
+                                <div class="total-col">$129.99</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="product-col">Designer Slim Jeans × 1</div>
+                                <div class="total-col">$89.99</div>
+                            </div>
+                        </div>
+                        <div class="order-totals">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <span>$469.97</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Shipping</span>
+                                <span>$9.99</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Discount</span>
+                                <span>-$50.00</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>Total</span>
+                                <span>$429.96</span>
+                            </div>
+                        </div>
 
-                            <div class="checkout__input__checkbox">
+                        <!-- Wallet Balance -->
+                        <div class="wallet-balance">
+                            <div class="balance-header">
+                                <i class="fas fa-wallet"></i>
+                                <span>Wallet Balance: $150.00</span>
+                            </div>
+                            <div class="use-wallet">
+                                <input type="checkbox" id="use-wallet">
+                                <label for="use-wallet">Use wallet balance ($150.00 available)</label>
+                            </div>
+                            <div class="remaining-balance">
+                                Remaining after wallet: <span>$279.96</span>
+                            </div>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="payment-methods">
+                            <h3>Payment Method</h3>
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="cod" checked>
                                 <label for="cod">
-                                    Cash On Delivery
-                                    <input checked name="paymentmethod" value="Cash on delivery"
-                                        onchange="uncheck('onlinePayment','Wallet'),enableButton2()" type="checkbox"
-                                        id="cod">
-                                    <span class="checkmark"></span>
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Cash on Delivery</span>
                                 </label>
                             </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="onlinePayment">
-                                    Online Payment
-                                    <input name="paymentmethod" value="online payments"
-                                        onchange="uncheck('cod','Wallet'),enableButton2()" type="checkbox"
-                                        id="onlinePayment">
-                                    <span class="checkmark"></span>
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="online-payment">
+                                <label for="online-payment">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Online Payment</span>
                                 </label>
-                                <script>
-                                    function uncheck(id, id1) {
-                                        var checkbox = document.getElementById(id);
-                                        checkbox.checked = false;
-                                        var checkbox1 = document.getElementById(id1);
-                                        checkbox1.checked = false;
-
-                                    }
-                                </script>
-                                <script>
-                                    function enableButton2() {
-                                        document.getElementById("submit").disabled = false;
-
-                                    }
-                                </script>
-
-
-
-
-
-
-
-
+                                <div class="payment-icons">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <i class="fab fa-cc-mastercard"></i>
+                                    <i class="fab fa-cc-amex"></i>
+                                    <i class="fab fa-cc-paypal"></i>
+                                </div>
                             </div>
-
-                            <p class="text-danger" id="error-message"></p>
-                            {{#if cart}}
-
-                            <button style="background: black;" id="submit" type="submit" class="site-btn">PLACE
-                                ORDER</button>
-                            {{else}}
-                            <div class="row">
-                                <p style="text-align: center;" class="text-danger"><b>YOUR CART IS EMPTY</b></p>
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="wallet-payment">
+                                <label for="wallet-payment">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>Wallet Payment</span>
+                                </label>
                             </div>
-                            {{/if}}
+                        </div>
+
+                        <div class="terms-agreement">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I have read and agree to the website <a href="#">terms and conditions</a>*</label>
+                        </div>
+
+                        <button type="submit" form="billing-form" class="btn place-order-btn">Place Order</button>
+
+                        <div class="secure-checkout">
+                            <i class="fas fa-lock"></i>
+                            <span>Secure Checkout</span>
                         </div>
                     </div>
                 </div>
-            </form>
-
+            </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ENCANTO VESTE</h3>
+                    <p>Premium fashion for those who appreciate quality and timeless style.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Shop</h3>
+                    <ul>
+                        <li><a href="#">Men's Collection</a></li>
+                        <li><a href="#">Women's Collection</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Encanto Veste. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-</section>
-
-<script>
-    function disableButton() {
-        document.getElementById("submit").disabled = true;
-
-    }
-</script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-
-
-<script>
-    $('#checkoutform').submit((e) => {
-        e.preventDefault()
-        $.ajax({
-            url: '/user-place-order',
-            method: 'POST',
-            data: $('#checkoutform').serialize(),
-            success: (response) => {
-
-
-                if (response.status == true) {
-                    razorpaypayment(response.order)
-                } else {
-                    location.href = "/orderSuccess"
-                }
-
-
-
-            }
-
-        })
-    })
-
-
-    function razorpaypayment(order) {
-
-        var options = {
-            "key": "rzp_test_MuIKQEa1huaLLF", // Enter the Key ID generated from the Dashboard
-            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            "currency": "INR",
-            "name": "Male_Fashion", //your business name
-            "description": "Test Transaction",
-            "image": "/img/logo.png",
-            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-            "handler": function (response) {
-
-
-                verifypayment(response, order)
-            },
-            "prefill": {
-                "name": "Gaurav Kumar", //your customer's name
-                "email": "gaurav.kumar@example.com",
-                "contact": "9000090000"
-            },
-            "notes": {
-                "address": "Razorpay Corporate Office"
-            },
-            "theme": {
-                "color": "#020208"
-            }
-        };
-
-        var rzp1 = new Razorpay(options);
-
-        rzp1.open();
-
-
-    }
-
-    function verifypayment(payment, order) {
-        $.ajax({
-
-            url: '/verify-payment',
-            data: {
-                payment,
-                order
-            },
-            method: "POST",
-            success: (response) => {
-
-                location.href = '/orderSuccess'
-            }
-
-
-        })
-
-
-    }
-
-</script>
-<!-- Checkout Section End -->
-
-
-
-{{>user-footer}}
+    <script src="checkout.js"></script>
+</body>
+</html>

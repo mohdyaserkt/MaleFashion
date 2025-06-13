@@ -43,6 +43,7 @@ router.get('/price-filter/',userGet.userGetPriceFilter)
 router.get('/orders-list',verifylogin,userGet.userGetOrdersList)
 router.get('/return-request/',verifylogin,userGet.userGetReturnRequest)
 router.get('/user-wishlist',verifylogin,userGet.userGetWishlist)
+Moonniyur higher secondary school
 
 router.get('/orderSuccess',verifylogin,userGet.userGetOrderSuccess)
 router.get('/setDefault/:id',verifylogin,userGet.userGetDefaultAddress)
